@@ -17,15 +17,23 @@ router.get('/', function(req, res) {
     };
     jsdom.env(req.query.url,
       function(err, window) {
-            var windowJSON = !err ? dom2json.toJSON(window.document) : null;
+            if (!err) {
+                //call gethtmlnode here?
 
-            res.render('html2graph', { 
-                title: 'Html to Graph',
-                hud: 'The Force Directed Graph for ' + req.query.url,
-                data: !windowJSON ? '' : JSON.stringify(windowJSON)
-            });
+                var windowJSON = dom2json.toJSON(window.document);
 
-            window.close();
+
+                res.render('html2graph', { 
+                    title: 'Html to Graph',
+                    hud: 'The Force Directed Graph for ' + req.query.url,
+                    data: !windowJSON ? '' : JSON.stringify(windowJSON)
+                });
+
+                window.close();
+            }
+            else {
+                console.log('[jsdom] ' + err + ', retrieving dom for [' + req.query.url + ']');
+            }
 
         }
     );
