@@ -5,6 +5,10 @@
     "start": "node ./bin/www"
   },
   "main": "./bin/www",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tsouk/ilandom.git"
+  },
   "dependencies": {
     "body-parser": "~1.13.2",
     "cheerio": "^0.20.0",
