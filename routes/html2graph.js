@@ -24,10 +24,13 @@ router.post('/', function(req, res) {
     };
 
     var url = req.param('url');
-    
+
     // Sanitise and add http if it does not exist
     if ( validator.isURL(url) ) {
         url = addhttp(url);
+    }
+    else {
+        res.render('html2graphempty');
     }
 
     if (url && url != '') {
@@ -41,7 +44,7 @@ router.post('/', function(req, res) {
 
                     res.render('html2graph', { 
                         title: 'Html to Graph',
-                        hud: 'The Force Directed Graph for ' + url,
+                        hud: 'The Force Directed Graph for ' + validator.escape(url),
                         data: !windowJSON ? '' : JSON.stringify(windowJSON)
                     });
 
