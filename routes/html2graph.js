@@ -8,7 +8,9 @@ var dom2json = require('../public/javascripts/dom2json');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-    res.render('html2graphinput');
+    res.render('html2graphinput', { 
+            title: 'Which webpage you want to see as a graph?'
+        });
 });
 
 /* Render HTML 2 GRAPH */
@@ -23,17 +25,12 @@ router.post('/', function(req, res) {
         }
     };
 
-    var url = req.param('url');
+    var url = req.body.url;
 
     // Sanitise and add http if it does not exist
     if ( validator.isURL(url) ) {
         url = addhttp(url);
-    }
-    else {
-        res.render('html2graphempty');
-    }
 
-    if (url && url != '') {
         jsdom.env(url,
           function(err, window) {
                 if (!err) {
@@ -58,9 +55,10 @@ router.post('/', function(req, res) {
         );
     }
     else {
-        res.render('html2graphempty');
+        res.render('html2graphinput', { 
+            title: 'You really need to pass a valid URL...'
+        });
     }
-
     
 });
 
