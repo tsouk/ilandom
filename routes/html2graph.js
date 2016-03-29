@@ -9,7 +9,7 @@ var dom2json = require('../public/javascripts/dom2json');
 /* GET home page. */
 router.get('/', function(req, res, next) {
     res.render('html2graphinput', { 
-            title: 'Which webpage you want to see as a graph?'
+            title: 'Which webpage do you want to see as a graph?'
         });
 });
 
