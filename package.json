@@ -1,8 +1,10 @@
 {
   "name": "ilandom",
   "version": "0.0.3",
+  "homepage": "http://www.tsouk.com/html2graph",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "build": "grunt build"
   },
   "main": "./bin/www",
   "repository": {
@@ -26,5 +28,10 @@
   },
   "engines": {
     "node": "5.7.0"
+  },
+  "devDependencies": {
+    "grunt": "^1.0.1",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-run-grunt": "^0.1.4"
   }
 }

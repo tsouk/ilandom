@@ -42,7 +42,7 @@ router.post('/', function(req, res) {
                     //console.log(prettyjson.render(windowJSON));
 
 
-                    res.render('html2graph', { 
+                    res.render('html2hanami', { 
                         title: 'Html to Graph',
                         hud: 'The Force Directed Graph for <br>' + validator.escape(url),
                         data: data
