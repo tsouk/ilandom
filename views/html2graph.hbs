@@ -1,16 +1,18 @@
-<!--   <script src="javascripts/recurseDomChildren.js"></script>
- -->  <script src="javascripts/sigma.min.js"></script>
+  <link rel='stylesheet' href='/stylesheets/html2graph.css' />
+  <script src="javascripts/sigma.min.js"></script>
   <script src="javascripts/sigma.layout.forceAtlas2.min.js"></script>
   <script src="javascripts/sigma.layout.noverlap.min.js"></script>
   <script src="javascripts/sigma.plugins.animate.min.js"></script>
   <script>
       window.windowDom = {{{data}}};
   </script>
-    <div class="html2graph-info">
+    <div class="html2graph-info" >
         <h3>{{{hud}}}</h3>
         <div>
-            <h4>Status</h4>
             <p id="html2graph-status">Started ForceAtlas2</p>
+            <!-- <p>
+                <button class="myButton" onclick="stopAtlas()">Stop the Atlas</button>
+            </p> -->
             <p class="attribution">
                 <em>...made with <a href="http://sigmajs.org/">sigma.js</a></em><br>
                 and Node
@@ -32,40 +34,64 @@
      The nodeValue object text should always arrive here escaped, so <script> tags will not be written from other DOM objects, in the client.
      */
 
+     document.getElementById("html2graph-status").addEventListener("click", stopAtlas);
+
     var s,
+        graphSettings,
+        userStopped = false,
         nodeIdPrefix = 'n',
         edgeIdPrefix = 'e',
-        nodeSize = 15,
+        nodeSize = 10,
         nodeColor = '#' + (
             Math.floor(Math.random() * 16777215).toString(16) + '000000'
         ).substr(0, 6),
         forceAtlas2Config,
         SEC = 1000,
         finaleEaseTime = 5 * SEC;
-        stepTime = 0.1 * SEC;
+        stepTime = 0.2 * SEC; //this one can crash your shizzle
+
+    graphSettings = {
+        defaultNodeType: 'border',
+        //defaultEdgeType: 'curve',
+        rescaleIgnoreSize: true,
+        autoRescale: true,
+        drawLabels: false,
+        sideMargin: 10
+    }
 
     s = new sigma({
-      container: 'graph-container',
-      settings: {
-          drawNodes: true,
-          minEdgeSize: 0.1,
-          maxEdgeSize: 0.1
-      }
+        renderer: {
+          // IMPORTANT:
+          // This works only with the canvas renderer, so the
+          // renderer type set as "canvas" is necessary here.
+          container: 'graph-container',
+          type: 'canvas'
+        },
+        settings: graphSettings
     });
 
+    /*
+        - gravity: brings disconnected components closer to the center (and slightly affects the shape of the components as a side-effect).
+        - strongGravityMode:sets a force that attracts the nodes that are distant from the center more ( is this distance).
+    */
     forceAtlas2Config = {
         linLogMode: false,
         outboundAttractionDistribution: false,
-        adjustSizes: false, //true works weirdly... like the gravity moves around
-        worker: true,
-        barnesHutOptimize: false,
-        slowDown: 10,
-        gravity: 2, //keeps things in the center
+        adjustSizes: false,
+        edgeWeightInfluence: 0,
         scalingRatio: 1,
-        edgeWeightInfluence: 0, //setting to 1 makes things less free
+        strongGravityMode: false,
+        gravity: 1,     
+        barnesHutOptimize: true,
+        barnesHutTheta: 0.5,
+        slowDown: 40,      
         startingIterations: 1,
         iterationsPerRender: 1,
-        strongGravityMode: false //that one makes things stickier
+        worker: true
+    };
+
+    function stopAtlas() {
+        userStopped = true;
     };
 
     //var edgeIntervalId = setInterval(addAnEdge, 0.3*SEC, E*2);
@@ -149,7 +175,6 @@
       graphInstance.startNoverlap();
     }
 
-    // TODO: Fix this so it finds the HTML tag, specifically. Or the first tag with type 1? Maybe the HTML tag
     function createRoot(graphInstance, domNode) {
         if (typeof graphInstance.graph.nodes() !== 'undefined' && graphInstance.graph.nodes().length > 0) {
             console.log("Error creating root object");
@@ -164,9 +189,9 @@
             y: 0,
             size: nodeSize,
             label: rootId + '-0',
-            color: '#000'
+            color: '#ccc'
         });
-        // Start the ForceAtlas2 algorithm:
+
         graphInstance.startForceAtlas2(forceAtlas2Config);
 
         return rootId;
@@ -182,7 +207,6 @@
         graphInstance.startForceAtlas2();
     }
 
-    // TODO: Test and refactor
     function addNodesToEnd(graphInstance, maxNodes) {
         graphInstance.killForceAtlas2();
         
@@ -221,7 +245,7 @@
 
     function recurseDomChildren(graphInstance, parent, parentNodeId) {
         var children;
-        console.log(parent);
+        //console.log(parent);
 
         if (parent.childNodes) {
             children = parent.childNodes;
@@ -271,17 +295,17 @@
         var childNodeId;
 
         var nodeIntervalId = setInterval(function() {
+            if (userStopped) {
+                graphInstance.killForceAtlas2();
+                updateStatus('User stopped ForceAtlas2');
+                return;
+            }
             if (current = stack[stackItem++]) {
-                if (!current.element.parentElement) {
-                    console.log('Element with no parent: ' + (current.element.nodeName || current.element.tagName));
-                }
                 //console.log('popping next parent from stack');
                 depth = current.depth;
                 parent = current.element;
                 parentNodeId = current.nodeId;
                 children = parent.childNodes;
-
-                //var childrenNodeIds = new Array();
 
                 for (i = 0, len = children.length; i < len; i++) {
                     if (children[i].nodeType === 1) {
@@ -292,7 +316,6 @@
                             nodeId: childNodeId,
                             depth: depth + 1
                         });
-                        //childrenNodeIds.push(childNodeId);
                     }
                 }
 
@@ -303,12 +326,10 @@
                 
             } else {
                 clearInterval(nodeIntervalId);
-                console.log('Finished adding nodes');
                 updateStatus('Finished adding nodes');
                 //give the graph some time to finish rendering
                 setTimeout(function() {
                     graphInstance.killForceAtlas2();
-                    console.log('Stopped ForceAtlas2');
                     updateStatus('Stopped ForceAtlas2');
                     //doNoverlap(graphInstance);
                 }, finaleEaseTime);
@@ -318,7 +339,7 @@
 
     }
 
-    // Should create a node, for every child, and create the edge between it and the parent
+    // Create a node, for every child, and create the edge between it and the parent
     function addNewChildNodeToParent(graphInstance, parent, parentNodeId, child) {
 
         graphInstance.killForceAtlas2();
@@ -327,20 +348,20 @@
         nodeCount = allNodes.length;
         nodeCount++;
         childNodeId = child.tagName + '-' + nodeCount;
-        console.log(childNodeId);
         parentNode = graphInstance.graph.nodes(parentNodeId);
+
+        var size = Math.random() * nodeSize;
 
         graphInstance.graph.addNode({
             id: childNodeId,
             label: childNodeId,
-            size: Math.random() * nodeSize,
+            size: size,
             x: parentNode.x + (Math.random() * 2) * Math.cos(2 * 10 * Math.PI / Math.random()),
             y: parentNode.y + (Math.random() * 2) * Math.sin(2 * 10 * Math.PI / Math.random()),
             color: '#' + intToRGB(hashCode(child.tagName))
         });
 
         //console.log("connecting: " + parentNodeId + '->' + childNodeId);
-
         graphInstance.graph.addEdge({
             id: parentNodeId + '->' + childNodeId,
             source: parentNodeId,
@@ -352,7 +373,7 @@
 
     }
 
-    function hashCode(str) { // java String#hashCode
+    function hashCode(str) {
         var hash = 0;
         for (var i = 0; i < str.length; i++) {
             hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -371,7 +392,7 @@
     function outputNode(node) {
         var whitespace = /^\s+$/g;
         if (node.nodeType === 1) {
-            console.log("element: " + node.tagName);
+            //console.log("element: " + node.tagName);
         } else if (node.nodeType === 3) {
             //clear whitespace text nodes
             node.data = node.data.replace(whitespace, "");

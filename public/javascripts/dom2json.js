@@ -12,9 +12,9 @@ function toJSON(node) {
   if (node.nodeValue) {
     obj.nodeValue = escapeHtml(node.nodeValue);
   }
-  if (node.parentElement) {
-    obj.parentElement = node.parentElement;
-  }
+  // if (node.parentElement) {
+  //   obj.parentElement = node.parentElement;
+  // }
   var attrs = node.attributes;
   if (attrs) {
     var length = attrs.length;

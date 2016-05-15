@@ -2,6 +2,7 @@ var express = require('express');
 var router = express.Router();
 var jsdom = require('jsdom');
 var validator = require('validator');
+var prettyjson = require('prettyjson');
 var recurseDomChildren = require('../public/javascripts/recurseDomChildren');
 var dom2json = require('../public/javascripts/dom2json');
 
@@ -37,12 +38,14 @@ router.post('/', function(req, res) {
                     //call gethtmlnode here?
 
                     var windowJSON = dom2json.toJSON(window.document);
+                    var data = !windowJSON ? '' : JSON.stringify(windowJSON);
+                    //console.log(prettyjson.render(windowJSON));
 
 
                     res.render('html2graph', { 
                         title: 'Html to Graph',
-                        hud: 'The Force Directed Graph for ' + validator.escape(url),
-                        data: !windowJSON ? '' : JSON.stringify(windowJSON)
+                        hud: 'The Force Directed Graph for <br>' + validator.escape(url),
+                        data: data
                     });
 
                     window.close();
