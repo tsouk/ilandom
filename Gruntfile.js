@@ -5,7 +5,9 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'sigma.js/build/',
-                    src: ['sigma.min.js'],
+                    src: ['sigma.min.js',
+                        'plugins/sigma.layout.*',
+                        'plugins/sigma.plugins.animate.min.js'],
                     dest: 'public/javascripts/'
                 }]
             }
