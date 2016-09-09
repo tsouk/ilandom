@@ -1,8 +1,8 @@
   <link rel='stylesheet' href='/stylesheets/html2graph.css' />
-  <script src="javascripts/sigma.min.js"></script>
-  <script src="javascripts/sigma.layout.forceAtlas2.min.js"></script>
-  <script src="javascripts/sigma.layout.noverlap.min.js"></script>
-  <script src="javascripts/sigma.plugins.animate.min.js"></script>
+  <script src="/javascripts/sigma.min.js"></script>
+  <script src="/javascripts/sigma.layout.forceAtlas2.min.js"></script>
+  <script src="/javascripts/sigma.layout.noverlap.min.js"></script>
+  <script src="/javascripts/sigma.plugins.animate.min.js"></script>
   <script>
       window.windowDom = {{{data}}};
   </script>
@@ -307,15 +307,18 @@
                 parentNodeId = current.nodeId;
                 children = parent.childNodes;
 
-                for (i = 0, len = children.length; i < len; i++) {
-                    if (children[i].nodeType === 1) {
-                        //console.log('adding child to stack');
-                        childNodeId = addNewChildNodeToParent(graphInstance, parent, parentNodeId, children[i]);
-                        stack.push({ //pass args via object or array
-                            element: children[i],
-                            nodeId: childNodeId,
-                            depth: depth + 1
-                        });
+                //I should probably check for ...
+                if (children) {
+                    for (i = 0, len = children.length; i < len; i++) {
+                        if (children[i].nodeType === 1) {
+                            //console.log('adding child to stack');
+                            childNodeId = addNewChildNodeToParent(graphInstance, parent, parentNodeId, children[i]);
+                            stack.push({ //pass args via object or array
+                                element: children[i],
+                                nodeId: childNodeId,
+                                depth: depth + 1
+                            });
+                        }
                     }
                 }
 

@@ -3,6 +3,7 @@
   <script src="/javascripts/sigma.layout.forceAtlas2.min.js"></script>
   <script src="/javascripts/sigma.layout.noverlap.min.js"></script>
   <script src="/javascripts/sigma.plugins.animate.min.js"></script>
+  <script src="/javascripts/curve.min.js"></script>
   <script>
       window.windowDom = {{{data}}};
   </script>
@@ -14,7 +15,7 @@
                 <button class="myButton" onclick="stopAtlas()">Stop the Atlas</button>
             </p> -->
             <p class="attribution">
-                <em>...made with <a href="http://sigmajs.org/">sigma.js</a></em><br>
+                <em>Topo ...made with <a href="http://sigmajs.org/">sigma.js</a></em><br>
                 and Node
             </p>
         </div>
@@ -51,11 +52,12 @@
         stepTime = 0.2 * SEC; //this one can crash your shizzle
 
     graphSettings = {
-        defaultNodeType: 'sakura',
-        defaultEdgeType: 'curve',
+        defaultNodeType: 'border',
+        //defaultEdgeType: 'curve',
         rescaleIgnoreSize: true,
         autoRescale: true,
         drawLabels: false,
+        //drawEdges: false,
         sideMargin: 10
     }
 
