@@ -1,6 +1,6 @@
 [submodule "sigma.js"]
 	path = sigma.js
-	url = https://github.com/jacomyal/sigma.js.git
+	url = git://github.com/jacomyal/sigma.js.git
 [submodule "cardinal-spline-js"]
 	path = cardinal-spline-js
-	url = https://github.com/epistemex/cardinal-spline-js.git
+	url = git://github.com/epistemex/cardinal-spline-js.git
