@@ -10,11 +10,6 @@ module.exports = function(grunt) {
                         'plugins/sigma.plugins.animate.min.js'
                     ],
                     dest: 'public/javascripts/'
-                }, {
-                    expand: true,
-                    cwd: 'cardinal-spline-js/',
-                    src: ['*.js'],
-                    dest: 'public/javascripts/'
                 }]
             }
         }
