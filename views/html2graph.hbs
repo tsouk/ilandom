@@ -1,5 +1,6 @@
   <link rel='stylesheet' href='/stylesheets/html2graph.css' />
-  <script src="/javascripts/sigma.min.js"></script>
+  <!--<script src="/javascripts/sigma.min.js"></script>-->
+  <script src="/javascripts/sigma.js"></script>
   <script src="/javascripts/sigma.layout.forceAtlas2.min.js"></script>
   <script src="/javascripts/sigma.layout.noverlap.min.js"></script>
   <script src="/javascripts/sigma.plugins.animate.min.js"></script>
@@ -41,7 +42,7 @@
         userStopped = false,
         nodeIdPrefix = 'n',
         edgeIdPrefix = 'e',
-        nodeSize = 10,
+        nodeSize = 1000,
         nodeColor = '#' + (
             Math.floor(Math.random() * 16777215).toString(16) + '000000'
         ).substr(0, 6),
@@ -51,11 +52,12 @@
         stepTime = 0.2 * SEC; //this one can crash your shizzle
 
     graphSettings = {
-        defaultNodeType: 'border',
+        //defaultNodeType: 'border',
         //defaultEdgeType: 'curve',
-        rescaleIgnoreSize: true,
+        rescaleIgnoreSize: false,
         autoRescale: true,
         drawLabels: false,
+        drawEdges: true,
         sideMargin: 10
     }
 

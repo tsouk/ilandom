@@ -4,7 +4,8 @@
   "homepage": "http://www.tsouk.com/html2graph",
   "scripts": {
     "start": "node ./bin/www",
-    "build": "grunt build"
+    "build": "grunt build",
+    "build-dev": "grunt build-dev"
   },
   "main": "./bin/www",
   "repository": {

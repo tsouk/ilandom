@@ -5,18 +5,17 @@ module.exports = function(grunt) {
                 files: [{
                     expand: true,
                     cwd: 'sigma.js/build/',
-                    src: ['sigma.min.js',
+                    src: ['sigma.*',
                         'plugins/sigma.layout.*',
-                        'plugins/sigma.plugins.animate.min.js'],
+                        'plugins/sigma.plugins.animate.min.js'
+                    ],
                     dest: 'public/javascripts/'
-                },
-                {
+                }, {
                     expand: true,
                     cwd: 'cardinal-spline-js/',
                     src: ['*.js'],
                     dest: 'public/javascripts/'
-                }
-                ]
+                }]
             }
         }
     });
@@ -35,6 +34,21 @@ module.exports = function(grunt) {
         });
     });
 
+    grunt.registerTask('run-grunt-dev', function() {
+        var cb = this.async();
+        grunt.util.spawn({
+            cmd: 'npm',
+            args: ['run', 'build-dev'],
+            opts: {
+                cwd: 'sigma.js/'
+            }
+        }, function(error, result, code) {
+            console.log(result.stdout);
+            cb();
+        });
+    });
+
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.registerTask('build', ['run-grunt', 'copy']);
+    grunt.registerTask('build-dev', ['run-grunt-dev', 'copy']);
 };

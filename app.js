@@ -24,6 +24,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/html2graph', html2graph);
+app.use('/frogs', html2graph);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
