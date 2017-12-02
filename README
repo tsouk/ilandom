@@ -1,1 +1,41 @@
-"no DOM is an iland"
+# "no DOM is an iland"
+
+## TODO
+
+### remove openshift stuff
+
+### Service
+Service that responds with JSON of `nodes + data + x,y` and `edges + data` for:
+
+- Route that gets url from POST data, knows the type of JSON expected, returns JSON 
+  - module dom2Graph (run if possible, get x,y) and cache response.
+    - module dom2Json for sigma
+      - sigma.js in node 
+    - module dom2Json for ngraph
+      - ngraph in node
+    - module dom2Json for d3
+      - d3 in node
+    - module dom2Json ...
+      - ... in node
+      - 
+Try to make as little deviation as possible, extra data is ok. Test schemas with extra data also work with simpler ones.
+
+The service will compute the x,y in the server so we can take advantage of just adding the nodes in the client, with simple physics.
+A 3d island visualisation only needs the x,y as it would be coming up fro mwater
+Also will lru-cache the results for a while.
+
+The client can then use:
+- view layer of any visualisation
+- themes per view layer
+
+The service can then be called by something like Unity
+
+### Testing
+- can test with localhost, so just have some basic html pages served on a couple of endpoints.
+
+### Roadmap
+1. Move to service architecture
+1. Make test pages
+1. Implement simple d3 ngraph approach
+1. Implement 2d ngraph
+1. Look into cytoscape

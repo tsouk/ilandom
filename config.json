@@ -1,0 +1,7 @@
+{
+  "logging": {
+    "development": "silly",
+    "production": "info",
+    "filename": "app.log"
+  }
+}

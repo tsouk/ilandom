@@ -1,12 +1,14 @@
 #!/usr/bin/env node
 
+global.__base = __dirname + '/../';
+global.isProd = process.env.NODE_ENV === 'production';
+
 /**
  * Module dependencies.
  */
-
-var app = require('../app');
-var debug = require('debug')('ilandom:server');
-var http = require('http');
+const app = require('../app');
+const debug = require('debug')('ilandom:server');
+const http = require('http');
 
 /**
  * Get port from environment and store in Express.

@@ -6,8 +6,7 @@ var validator = require('validator');
 var prettyjson = require('prettyjson');
 var recurseDomChildren = require('../public/javascripts/recurseDomChildren');
 var dom2json = require('../public/javascripts/dom2json');
-const ilandomWinston = require(path.join(global.__base, 'lib/ilandom-winston-log'));
-const logger = ilandomWinston.getLogger('html2ngraph');
+// TODO: Add winston logging
 
 /* GET home page. */
 router.get(['/', '/:flavour'], function(req, res, next) {
@@ -43,7 +42,7 @@ router.post(['/', '/:flavour'], function(req, res) {
 
                     var windowJSON = dom2json.toJSON(window.document);
                     var data = !windowJSON ? '' : JSON.stringify(windowJSON);
-                    logger.debug(prettyjson.render(windowJSON));
+                    //console.log(prettyjson.render(windowJSON));
                     view = req.params.flavour == 'force directed' ? 'html2graph' : 'html2' + req.params.flavour;
 
                     res.render(view, { 
@@ -55,7 +54,7 @@ router.post(['/', '/:flavour'], function(req, res) {
                     window.close();
                 }
                 else {
-                    logger.error('[jsdom] ' + err + ', retrieving dom for [' + url + ']');
+                    console.log('[jsdom] ' + err + ', retrieving dom for [' + url + ']');
                 }
 
             }
