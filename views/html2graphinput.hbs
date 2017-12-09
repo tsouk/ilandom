@@ -1,11 +1,11 @@
 <h1>{{title}}</h1>
 <form action="/html2graph/{{flavour}}" method="post">
   <input class="myInput" type="text" name="url">
-  <div>
-    <input class="..." type="radio" id="in3d" name="dimensions" value="3" checked="checked">
+  <div class="myRadioGroup">
+    <input type="radio" id="in3d" name="dimensions" value="3" checked="checked">
     <label for="in3d">3d <em>with <a href="https://github.com/anvaka/ngraph">ngraph</a></em></label>
 
-    <input  class="..." type="radio" id="in2d" name="dimensions" value="2">
+    <input type="radio" id="in2d" name="dimensions" value="2">
     <label for="in2d">2d <em>with <a href="https://github.com/jacomyal/sigma.js">sigma</a></em></label>
   </div>
   <input class="myButton" type="submit" value="show me!">

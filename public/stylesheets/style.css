@@ -1,124 +1,138 @@
 body {
-    padding: 50px;
-    font: 14px Helvetica, Arial, sans-serif;
+  padding: 50px;
+  font: 14px Helvetica, Arial, sans-serif;
 }
 
 a {
-    color: #4078c0;
+  color: #4078c0;
 }
 
+.myRadioGroup {
+  padding: 16px 0px;
+}
+
+label {
+  margin-right: 16px;
+}
 
 .myInput {
-    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    box-shadow:inset 0px 1px 0px 0px #ffffff;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
-    background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
-    background-color:#ffffff;
-    /*-moz-border-radius:6px;*/
-    /*-webkit-border-radius:6px;*/
-    /*border-radius:6px;*/
-    border:1px solid #dcdcdc;
-    display:inline-block;
-    cursor:pointer;
-    color:#000;
-    font-family: Helvetica, Arial;
-    font-size:15px;
-    font-weight:bold;
-    padding:6px 24px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #ffffff;
-}
-.myButton {
-    -moz-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    -webkit-box-shadow:inset 0px 1px 0px 0px #ffffff;
-    box-shadow:inset 0px 1px 0px 0px #ffffff;
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
-    background:-moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:-ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
-    background:linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6',GradientType=0);
-    background-color:#ffffff;
-    -moz-border-radius:6px;
-    -webkit-border-radius:6px;
-    border-radius:6px;
-    border:1px solid #dcdcdc;
-    display:inline-block;
-    cursor:pointer;
-    color:#666666;
-    font-family: Helvetica, Arial;
-    font-size:15px;
-    font-weight:bold;
-    padding:6px 24px;
-    text-decoration:none;
-    text-shadow:0px 1px 0px #ffffff;
-}
-.myButton:hover {
-    background:-webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
-    background:-moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-    background:-webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-    background:-o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-    background:-ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
-    background:linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
-    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff',GradientType=0);
-    background-color:#f6f6f6;
-}
-.myButton:active {
-    position:relative;
-    top:1px;
+  -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  box-shadow: inset 0px 1px 0px 0px #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+  background: -moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6', GradientType=0);
+  background-color: #ffffff;
+  /*-moz-border-radius:6px;*/
+  /*-webkit-border-radius:6px;*/
+  /*border-radius:6px;*/
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  cursor: pointer;
+  color: #000;
+  font-family: Helvetica, Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #ffffff;
 }
 
+.myButton {
+  -moz-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  -webkit-box-shadow: inset 0px 1px 0px 0px #ffffff;
+  box-shadow: inset 0px 1px 0px 0px #ffffff;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #ffffff), color-stop(1, #f6f6f6));
+  background: -moz-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -webkit-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -o-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: -ms-linear-gradient(top, #ffffff 5%, #f6f6f6 100%);
+  background: linear-gradient(to bottom, #ffffff 5%, #f6f6f6 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffff', endColorstr='#f6f6f6', GradientType=0);
+  background-color: #ffffff;
+  -moz-border-radius: 6px;
+  -webkit-border-radius: 6px;
+  border-radius: 6px;
+  border: 1px solid #dcdcdc;
+  display: inline-block;
+  cursor: pointer;
+  color: #666666;
+  font-family: Helvetica, Arial;
+  font-size: 15px;
+  font-weight: bold;
+  padding: 6px 24px;
+  text-decoration: none;
+  text-shadow: 0px 1px 0px #ffffff;
+}
+
+.myButton:hover {
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0.05, #f6f6f6), color-stop(1, #ffffff));
+  background: -moz-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+  background: -webkit-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+  background: -o-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+  background: -ms-linear-gradient(top, #f6f6f6 5%, #ffffff 100%);
+  background: linear-gradient(to bottom, #f6f6f6 5%, #ffffff 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f6f6f6', endColorstr='#ffffff', GradientType=0);
+  background-color: #f6f6f6;
+}
+
+.myButton:active {
+  position: relative;
+  top: 1px;
+}
 
 .attribution {
-    font-size: 0.7em;
-    color: rgb(255, 0, 0);
+  font-size: 0.7em;
+  color: rgb(255, 0, 0);
 }
+
 .html2graph-info {
-    position: absolute;
-    z-index: 1;
-    left: 20px;
-    top: 20px;
-    width: 300px;
-    border-radius: 25px;
-    padding: 0px 20px;
-    border: 2px solid #73AD21;
-    background-color: rgba(255, 255, 228, 0.9);
-    /* mix-blend-mode: exclusion; */
+  position: absolute;
+  z-index: 1;
+  left: 20px;
+  top: 20px;
+  width: 300px;
+  border-radius: 25px;
+  padding: 0px 20px;
+  border: 2px solid #73AD21;
+  background-color: rgba(255, 255, 228, 0.9);
+  /* mix-blend-mode: exclusion; */
 }
+
 #html2graph-status {
-    cursor:pointer;
-    display: inline-block;
-    padding: 8px;
-    border-radius: 25px;
-    border: 2px solid #73AD21;
-    color: #000;
-    transition: color 1s ease-out, background-color 0.5s ease-out;
-    -ms-transition: color 1s ease-out, background-color 0.5s ease-out;
-    -moz-transition: color 1s ease-out, background-color 0.5s ease-out;
-    -webkit-transition: color 1s ease-out, background-color 0.5s ease-out;
+  cursor: pointer;
+  display: inline-block;
+  padding: 8px;
+  border-radius: 25px;
+  border: 2px solid #73AD21;
+  color: #000;
+  transition: color 1s ease-out, background-color 0.5s ease-out;
+  -ms-transition: color 1s ease-out, background-color 0.5s ease-out;
+  -moz-transition: color 1s ease-out, background-color 0.5s ease-out;
+  -webkit-transition: color 1s ease-out, background-color 0.5s ease-out;
 }
+
 #html2graph-status:hover {
-    background-color: pink;
+  background-color: pink;
 }
+
 #html2graph-status.sent-message {
-    background-color: yellow;
-    color: red;
-    transition: color 0.1s ease-in, background-color 0.1s ease-in;
-    -ms-transition: color 0.1s ease-in, background-color 0.1s ease-in;
-    -moz-transition: color 0.1s ease-in, background-color 0.1s ease-in;
-    -webkit-transition: color 0.1s ease-in, background-color 0.1s ease-in;
+  background-color: yellow;
+  color: red;
+  transition: color 0.1s ease-in, background-color 0.1s ease-in;
+  -ms-transition: color 0.1s ease-in, background-color 0.1s ease-in;
+  -moz-transition: color 0.1s ease-in, background-color 0.1s ease-in;
+  -webkit-transition: color 0.1s ease-in, background-color 0.1s ease-in;
 }
+
 #graph-container {
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  position: absolute;
 }
