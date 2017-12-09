@@ -1,16 +1,16 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const compression = require('compression');
 
-var index = require('./routes/index');
-var html2graph = require('./routes/html2graph');
-var html2ngraph = require('./routes/html2ngraph');
-var html2graphJSON = require('./routes/html2graphJSON');
-
-var app = express();
+const index = require('./routes/index');
+const html2graph = require('./routes/html2graph');
+const html2ngraph = require('./routes/html2ngraph');
+const html2graphJSON = require('./routes/html2graphJSON');
+const app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -18,6 +18,17 @@ app.set('view engine', 'hbs');
 
 // uncomment after placing your favicon in /public
 // app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+// TODO, static version your files, so they can be cached forever.
+app.use(express.static(path.join(__dirname, 'public'), {
+  etag: true,
+  lastModified: true,
+  setHeaders: function(res, path) {
+    res.setHeader('Cache-Control', 'public, max-age=86400'); // one day in seconds    
+  }
+}));
+
+app.use(compression());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

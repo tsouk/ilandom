@@ -18,16 +18,60 @@ const jsdomConfig = {
 };
 
 /* GET  */
-// router.get(['/', '/:graphType'], function(req, res, next) {
-//     var graphType = !req.params.graphType ? 'force directed' : req.params.graphType;
-//     res.render('html2graphinput', { 
-//             title: 'Which webpage do you want the JSON of, for a  ' + graphType + ' graph?',
-//             graphType: graphType
-//         });
-// });
+// Cache these in memory! and maybe for now in browsers.
+router.get(['/', '/:graphType'], function(req, res, next) {
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // one day in seconds
+  let url = req.query.url;
+  if (validator.isURL(url)) {
+    url = addhttp(url);
+    jsdom.env(url, (err, window) => {
+      if (!err) {
+
+        /*  break into options here, for sigma, ngraph etc.
+            based on the graphtype, load different modules and return the right JSON,
+            or the vanilla default JSON
+            Also, there might be an option for animated or non animated
+        */
+
+        //call gethtmlnode here?
+        //var data = !windowJSON ? '' : JSON.stringify(windowJSON);
+        const dom2json = require(path.join(global.__base, 'lib/dom2json'));
+        const data = dom2json.toJSON(window.document);
+        //logger.debug(prettyjson.render(windowJSON));
+        //view = req.params.graphType == 'sigmaJSON' ? 'sigmaJSON' : `${req.params.graphType}JSON`;
+
+        // res.render(view, { 
+        //     title: 'Html to JSON for Graph',
+        //     data: data
+        // });
+
+        res.status(200);
+        res.json(data);
+        res.end();
+        window.close();
+      }
+      else {
+        logger.error(`jsdom encountered error ${err} when retrieving dom for url: ${url}`);
+      }
+    });
+  } 
+  else {
+    let err = new Error('Non URL passed to JSON service');
+    err.description = 'Non URL passed to JSON service';
+    err.status = 500;
+    next(err);
+  }
+
+    // var graphType = !req.params.graphType ? 'force directed' : req.params.graphType;
+    // res.render('html2graphinput', { 
+    //         title: 'Which webpage do you want the JSON of, for a  ' + graphType + ' graph?',
+    //         graphType: graphType
+    //     });
+});
 
 /* Render HTML 2 GRAPH */
 router.post(['/', '/:graphType'], (req, res, next) => {
+  res.setHeader('Cache-Control', 'public, max-age=86400'); // one day in seconds  
   let url = req.body.url;
 
   // Sanitise and add http if it does not exist

@@ -11,8 +11,8 @@ const logger = ilandomWinston.getLogger('html2ngraph');
 
 router.get(['/'], (req, res, next) => {
   res.render('html2ngraph', {
-    title: 'Html2Ngraph',
-    layout: false,
+    title: 'Html2Ngraph'
+// need to pass the url to the view !!!!!!!!!!!!!! from the input field
   });
 });
 

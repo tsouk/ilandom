@@ -1,49 +1,44 @@
-module.exports = function(grunt) {
-    grunt.initConfig({
-        copy: {
-            main: {
-                files: [{
-                    expand: true,
-                    cwd: 'sigma.js/build/',
-                    src: ['sigma.*',
-                        'plugins/sigma.layout.*',
-                        'plugins/sigma.plugins.animate.min.js'
-                    ],
-                    dest: 'public/javascripts/'
-                }]
-            }
+module.exports = function (grunt) {
+  grunt.initConfig({
+    copy: {
+      main: {
+        files: [{
+          expand: true,
+          cwd: 'sigma.js/build/',
+          src: ['sigma.*',
+            'plugins/sigma.layout.*',
+            'plugins/sigma.plugins.animate.min.js'
+          ],
+          dest: 'public/javascripts/sigma'
+        },
+        {
+          expand: true,
+          cwd: 'ngraph.pixel/demo/basic/',
+          src: ['bundle.js'],
+          dest: 'public/javascripts/ngraph.pixel.basic'
+        }]
+      }
+    },
+    'npm-command': {
+      sigma: {
+        options: {
+          cmd: 'run',
+          args: ['build'],
+          cwd: 'sigma.js/'
         }
-    });
+      },
 
-    grunt.registerTask('run-grunt', function() {
-        var cb = this.async();
-        grunt.util.spawn({
-            cmd: 'npm',
-            args: ['run', 'build'],
-            opts: {
-                cwd: 'sigma.js/'
-            }
-        }, function(error, result, code) {
-            console.log(result.stdout);
-            cb();
-        });
-    });
+      pixel: {
+        options: {
+          cmd: 'run',
+          args: ['basic'],
+          cwd: 'ngraph.pixel/'
+        }
+      },
+    }
+  });
 
-    grunt.registerTask('run-grunt-dev', function() {
-        var cb = this.async();
-        grunt.util.spawn({
-            cmd: 'npm',
-            args: ['run', 'build-dev'],
-            opts: {
-                cwd: 'sigma.js/'
-            }
-        }, function(error, result, code) {
-            console.log(result.stdout);
-            cb();
-        });
-    });
-
-    grunt.loadNpmTasks('grunt-contrib-copy');
-    grunt.registerTask('build', ['run-grunt', 'copy']);
-    grunt.registerTask('build-dev', ['run-grunt-dev', 'copy']);
+  grunt.loadNpmTasks('grunt-contrib-copy');
+  grunt.loadNpmTasks('grunt-npm-command');
+  grunt.registerTask('build', ['npm-command', 'copy']);
 };
