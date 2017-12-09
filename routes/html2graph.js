@@ -1,11 +1,7 @@
 var express = require('express');
 var path = require('path');
 var router = express.Router();
-var jsdom = require('jsdom');
 var validator = require('validator');
-var prettyjson = require('prettyjson');
-var recurseDomChildren = require('../public/javascripts/recurseDomChildren');
-var dom2json = require('../public/javascripts/dom2json');
 const ilandomWinston = require(path.join(global.__base, 'lib/ilandom-winston-log'));
 const logger = ilandomWinston.getLogger('html2ngraph');
 
@@ -20,51 +16,22 @@ router.get(['/', '/:flavour'], function (req, res, next) {
 
 /* Render HTML 2 GRAPH */
 router.post(['/', '/:flavour'], function (req, res) {
-  var jsdomConfig = {
-    agentOptions: {
-      keepAlive: true,
-      keepAliveMsecs: 115000,
-    },
-    pool: {
-      maxSockets: 1
-    }
-  };
-
   var url = req.body.url;
 
-  // Sanitise and add http if it does not exist
+  // html2JSON does url validation also, but we need this here to reply to the user
   if (validator.isURL(url)) {
     url = addhttp(url);
-
-    jsdom.env(url,
-      function (err, window) {
-        if (!err) {
-          //call gethtmlnode here?
-
-          var windowJSON = dom2json.toJSON(window.document);
-          var data = !windowJSON ? '' : JSON.stringify(windowJSON);
-          logger.debug(prettyjson.render(windowJSON));
-          view = req.params.flavour == 'force directed' ? 'html2graph' : 'html2' + req.params.flavour;
-
-          res.render(view, {
-            title: 'Html to Graph',
-            hud: 'The Force Directed Graph for <br>' + validator.escape(url),
-            data: data
-          });
-
-          window.close();
-        } else {
-          logger.error('[jsdom] ' + err + ', retrieving dom for [' + url + ']');
-        }
-
-      }
-    );
+    view = req.params.flavour == 'force directed' ? 'html2graph' : 'html2' + req.params.flavour;
+    res.render(view, {
+      title: 'Html to Graph',
+      hud: 'The Force Directed Graph for <br>' + validator.escape(url),
+      url: url
+    });
   } else {
     res.render('html2graphinput', {
       title: 'You really need to pass a valid URL...'
     });
   }
-
 });
 
 function addhttp(url) {

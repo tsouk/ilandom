@@ -3,7 +3,7 @@
     alert('No reference to the window object');
   }
   else {
-    window.getUrlAndParseJson = function (url, callback) {
+    window.getUrlAndParseJson = function (url, callback, graphInit) {
     var httpRequest;
 
     function makeRequest(url) {
@@ -23,7 +23,7 @@
         if (httpRequest.status === 200) {
           //console.log(httpRequest.responseText);
           if (typeof callback === 'function') {
-            callback(JSON.parse(httpRequest.responseText));
+            callback(JSON.parse(httpRequest.responseText), graphInit);
           }
           else {
             console.log('Callback to GET request is not a function');

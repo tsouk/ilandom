@@ -4,8 +4,21 @@ const router = express.Router();
 const jsdom = require('jsdom');
 const validator = require('validator');
 const prettyjson = require('prettyjson');
-const ilandomWinston = require(path.join(global.__base, 'lib/ilandom-winston-log'));
+const ilandomWinston = require(path.join(`${global.__base}lib/ilandom-winston-log`));
+const sharedMiddleware = require(`${global.__base}lib/shared-middleware`);
 const logger = ilandomWinston.getLogger('html2graphJSON');
+
+/* eslint-disable no-unused-vars */
+const LRU = require('lru-cache');
+const cacheOptions = {
+  max: 11000 * 100,
+  length(n, key) { return sharedMiddleware.sizeof(n); },
+  dispose(key, n) {},
+  maxAge: 1000 * 120,
+  stale: true,
+};
+/* eslint-enable no-unused-vars */
+const cache = LRU(cacheOptions);
 
 const jsdomConfig = {
   agentOptions: {
@@ -22,92 +35,40 @@ const jsdomConfig = {
 router.get(['/', '/:graphType'], function(req, res, next) {
   res.setHeader('Cache-Control', 'public, max-age=86400'); // one day in seconds
   let url = req.query.url;
+
   if (validator.isURL(url)) {
     url = addhttp(url);
-    jsdom.env(url, (err, window) => {
-      if (!err) {
+    const data = cache.get(url);
+    
+    if (data) {
+      logger.debug(`cache hit ${url}`);
+      res.status(200);
+      res.json(data);
+      res.end();
+    }
+    else {
+      logger.debug(`cache miss ${url}`);
+      jsdom.env(url, (err, window) => {
+        if (!err) {
+          /*  break into options here, for sigma, ngraph etc.
+              based on the graphtype, load different modules and return the right JSON,
+              or the vanilla default JSON
+              Also, there might be an option for animated or non animated
+          */
+          const dom2json = require(path.join(global.__base, 'lib/dom2json'));
+          const data = dom2json.toJSON(window.document);
 
-        /*  break into options here, for sigma, ngraph etc.
-            based on the graphtype, load different modules and return the right JSON,
-            or the vanilla default JSON
-            Also, there might be an option for animated or non animated
-        */
-
-        //call gethtmlnode here?
-        //var data = !windowJSON ? '' : JSON.stringify(windowJSON);
-        const dom2json = require(path.join(global.__base, 'lib/dom2json'));
-        const data = dom2json.toJSON(window.document);
-        //logger.debug(prettyjson.render(windowJSON));
-        //view = req.params.graphType == 'sigmaJSON' ? 'sigmaJSON' : `${req.params.graphType}JSON`;
-
-        // res.render(view, { 
-        //     title: 'Html to JSON for Graph',
-        //     data: data
-        // });
-
-        res.status(200);
-        res.json(data);
-        res.end();
-        window.close();
-      }
-      else {
-        logger.error(`jsdom encountered error ${err} when retrieving dom for url: ${url}`);
-      }
-    });
-  } 
-  else {
-    let err = new Error('Non URL passed to JSON service');
-    err.description = 'Non URL passed to JSON service';
-    err.status = 500;
-    next(err);
-  }
-
-    // var graphType = !req.params.graphType ? 'force directed' : req.params.graphType;
-    // res.render('html2graphinput', { 
-    //         title: 'Which webpage do you want the JSON of, for a  ' + graphType + ' graph?',
-    //         graphType: graphType
-    //     });
-});
-
-/* Render HTML 2 GRAPH */
-router.post(['/', '/:graphType'], (req, res, next) => {
-  res.setHeader('Cache-Control', 'public, max-age=86400'); // one day in seconds  
-  let url = req.body.url;
-
-  // Sanitise and add http if it does not exist
-  if (validator.isURL(url)) {
-    url = addhttp(url);
-
-    jsdom.env(url, (err, window) => {
-      if (!err) {
-
-        /*  break into options here, for sigma, ngraph etc.
-            based on the graphtype, load different modules and return the right JSON,
-            or the vanilla default JSON
-            Also, there might be an option for animated or non animated
-        */
-
-        //call gethtmlnode here?
-        //var data = !windowJSON ? '' : JSON.stringify(windowJSON);
-        const dom2json = require(path.join(global.__base, 'lib/dom2json'));
-        const data = dom2json.toJSON(window.document);
-        //logger.debug(prettyjson.render(windowJSON));
-        //view = req.params.graphType == 'sigmaJSON' ? 'sigmaJSON' : `${req.params.graphType}JSON`;
-
-        // res.render(view, { 
-        //     title: 'Html to JSON for Graph',
-        //     data: data
-        // });
-
-        res.status(200);
-        res.json(data);
-        res.end();
-        window.close();
-      }
-      else {
-        logger.error(`jsdom encountered error ${err} when retrieving dom for url: ${url}`);
-      }
-    });
+          cache.set(url, data);
+          res.status(200);
+          res.json(data);
+          res.end();
+          window.close();
+        }
+        else {
+          logger.error(`jsdom encountered error ${err} when retrieving dom for url: ${url}`);
+        }
+      });
+    }
   } 
   else {
     let err = new Error('Non URL passed to JSON service');

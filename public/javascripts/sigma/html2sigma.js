@@ -2,7 +2,7 @@
   if (!window) {
     alert('No reference to the window object');
   } else {
-    window.html2sigma = function (sigma, graphSettings, graphJson, graphContainer, status) {
+    window.html2sigma = function (graphJson, graphInit) {
 
       /*
       sigma: the sigma graph object
@@ -18,12 +18,11 @@
       }
       The nodeValue object text should always arrive here escaped, so <script> tags will not be written from other DOM objects, in the client.
       */
-      if (status) {
-        document.getElementById(status).addEventListener("click", stopAtlas);
+      if (graphInit.status) {
+        document.getElementById(graphInit.status).addEventListener("click", stopAtlas);
       }
 
       var s,
-        graphSettings,
         userStopped = false,
         nodeIdPrefix = 'n',
         edgeIdPrefix = 'e',
@@ -36,15 +35,15 @@
         finaleEaseTime = 5 * SEC,
         stepTime = 0.2 * SEC; //this one can crash your shizzle
 
-      s = new sigma({
+      s = new graphInit.sigma({
         renderer: {
           // IMPORTANT:
           // This works only with the canvas renderer, so the
           // renderer type set as "canvas" is necessary here.
-          container: 'graph-container',
+          container: graphInit.graphContainer,
           type: 'canvas'
         },
-        settings: graphSettings
+        settings: graphInit.graphSettings
       });
 
       /*
@@ -106,7 +105,7 @@
       }
 
       function updateStatus(message) {
-        statusElement = document.getElementById(status);
+        statusElement = document.getElementById(options.status);
         statusElement.innerHTML = message;
         statusElement.className = 'sent-message';
         setTimeout(function () {

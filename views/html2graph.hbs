@@ -4,9 +4,6 @@
 <script src="/javascripts/sigma/plugins/sigma.layout.forceAtlas2.min.js"></script>
 <script src="/javascripts/sigma/plugins/sigma.layout.noverlap.min.js"></script>
 <script src="/javascripts/sigma/plugins/sigma.plugins.animate.min.js"></script>
-<script>
-    window.windowDom = {{{data}}};
-</script>
 <div class="html2graph-info" >
     <h3>{{{hud}}}</h3>
     <div>
@@ -22,11 +19,12 @@
 <div id="container">
     <div id="graph-container"></div>
 </div>
+<script src="/javascripts/getUrlAndParseJson.js"></script>
 <script src="/javascripts/sigma/html2sigma.js"></script>
 <script>
-  window.html2sigma(
-    window.sigma,
-    {
+  var graphInit = {
+    sigma: window.sigma,
+    graphSettings: {
       //defaultNodeType: 'border',
       //defaultEdgeType: 'curve',
       rescaleIgnoreSize: false,
@@ -35,8 +33,8 @@
       drawEdges: true,
       sideMargin: 10
     },
-    window.windowDom,
-    'graph-container',
-    'html2graph-status'
-  );
+    graphContainer: 'graph-container',
+    status: 'html2graph-status'
+  }
+  window.getUrlAndParseJson( '/html2graphJSON?url={{url}}', window.html2sigma, graphInit);
 </script>

@@ -17,7 +17,8 @@
   <script src="javascripts/ngraph.pixel.basic/bundle.js"></script>
   <script src="javascripts/getUrlAndParseJson.js"></script>
   <script>
-    window.getUrlAndParseJson('/html2graphJSON?url=www.bbc.co.uk/gel', window.start3dgraph );
+    var graphOptions = {};
+    window.getUrlAndParseJson('/html2graphJSON?url=www.bbc.co.uk/gel', window.start3dgraph, graphOptions );
     //window.getUrlAndParseJson({{url}}, window.start3dgraph );
   </script>
 </body>
