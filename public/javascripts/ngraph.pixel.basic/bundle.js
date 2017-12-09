@@ -19,6 +19,10 @@ function start3dgraph (data) {
 
   recurseBF.events.on('cleared', function() {
     console.log('Finished adding nodes, stable');
+    renderer.forEachNode(function(nodeUI){
+      nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(nodeUI.id));
+      nodeUI.size = 50;
+    })
     renderer.stable(true);
   });
 
@@ -26,9 +30,10 @@ function start3dgraph (data) {
     //renderer.graph().addLink(parentNodeId, childNodeId);
     renderer.forEachNode(function(nodeUI){
       nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(nodeUI.id));
+      nodeUI.size = 50;
     })
-    //renderer.getNode(childNodeId).size = 100; // this is reset when something is added to the graph
-    //renderer.getNode(childNodeId).color = 0x000000; // this is reset when something is added to the graph
+    renderer.getNode(childNodeId).size = 100; // this is reset when something is added to the graph
+    renderer.getNode(childNodeId).color = 0x000000; // this is reset when something is added to the graph
     renderer.focus(); // not sure what that does...
     renderer.stable(false);
   });

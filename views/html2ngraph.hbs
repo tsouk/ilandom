@@ -1,25 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>{{title}} - by Nikos Tsouknidas using ngraph</title>
-  <style>
-    body {
-      width: 100%;
-      height : 100%;
-      position: absolute;
-      overflow: hidden;
-      padding: 0;
-      margin: 0;
-    }
-  </style>
-</head>
-<body>
-  <script src="javascripts/ngraph.pixel.basic/bundle.js"></script>
-  <script src="javascripts/getUrlAndParseJson.js"></script>
-  <script>
-    var graphOptions = {};
-    window.getUrlAndParseJson('/html2graphJSON?url=www.bbc.co.uk/gel', window.start3dgraph, graphOptions );
-    //window.getUrlAndParseJson({{url}}, window.start3dgraph );
-  </script>
-</body>
-</html>
+
+<style>
+  body {
+    width: 100%;
+    height : 100%;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+</style>
+<div class="html2graph-info" >
+    <h3>{{{hud}}}</h3>
+    <div>
+        {{!-- <p id="html2graph-status">Started ForceAtlas2</p> --}}
+        <!-- <p>
+            <button class="myButton" onclick="stopAtlas()">Stop the Atlas</button>
+        </p> -->
+        <p class="attribution">
+            <em>...made by <a href="https://twitter.com/tsoukn">tsouk</a> with <a href="https://github.com/anvaka/ngraph">ngraph</a></em>
+        </p>
+    </div>
+</div>
+<link rel='stylesheet' href='/stylesheets/html2graph.css' />
+<script src="/javascripts/ngraph.pixel.basic/bundle.js"></script>
+<script src="/javascripts/getUrlAndParseJson.js"></script>
+<script>
+  var graphOptions = {};
+  window.getUrlAndParseJson('/html2graphJSON?url={{url}}', window.start3dgraph, graphOptions );
+  //window.getUrlAndParseJson({{url}}, window.start3dgraph );
+</script>
