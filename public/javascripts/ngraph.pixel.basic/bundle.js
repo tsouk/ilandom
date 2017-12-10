@@ -16,11 +16,12 @@ var eventify = require('ngraph.events');
 function start3dgraph (data) {
   recurseBF.recurseBF(graph, recurseBF.getHtmlNode(data));
   var renderer = renderGraph(graph);
+  const regex = /^[a-z]*/;
 
   recurseBF.events.on('cleared', function() {
     console.log('Finished adding nodes, stable');
     renderer.forEachNode(function(nodeUI){
-      nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(nodeUI.id));
+      nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(regex.exec(nodeUI.id)[0]));
       nodeUI.size = 50;
     })
     renderer.stable(true);
@@ -29,7 +30,8 @@ function start3dgraph (data) {
   recurseBF.events.on('added', function( parentNodeId, childNodeId ) {
     //renderer.graph().addLink(parentNodeId, childNodeId);
     renderer.forEachNode(function(nodeUI){
-      nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(nodeUI.id));
+      myArray = regex.exec(nodeUI.id);
+      nodeUI.color = '0x' + recurseBF.intToRGB(recurseBF.hashCode(regex.exec(nodeUI.id)[0]));
       nodeUI.size = 50;
     })
     renderer.getNode(childNodeId).size = 100; // this is reset when something is added to the graph
@@ -94,7 +96,7 @@ function createRoot(graph, domNode) {
     y: 0,
     size: nodeSize,
     label: rootId + '-0',
-    color: '#ccc'
+    tagColor: '0x000000'
   });
   
   return rootId;
