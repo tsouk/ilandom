@@ -1463,7 +1463,7 @@ const stepTime = 0.2 * SEC; //this one can crash your shizzle
 const nodeSize = 1000;
 const nodeColor = '#' + (Math.floor(Math.random() * 16777215).toString(16) + '000000').substr(0, 6);
 
-events.fire('foo');
+events.fire('foo'); //huh???
 
 function getHtmlNode(domObject) {
   var i = 0;
@@ -1478,11 +1478,6 @@ function getHtmlNode(domObject) {
 }
 
 function createRoot(graph, domNode) {
-  // Sigma: graphInstance.graph.nodes()
-  // ngrpah: graph.getNodesCount
-  //
-  // Sigma: graph.addNode
-  // Ngraph: graph.addNode
   if (graph.getNodesCount() > 0) {
     console.log("Error creating root object");
     return;
@@ -1518,11 +1513,12 @@ function recurseBF(graph, treeHeadNode) {
   var childNodeId;
 
   var nodeIntervalId = setInterval(function () {
-    if (current = stack[stackItem++]) {
-      // console.log('popped next child that is now a parent, from stack');
+    if (current = stack.pop()) {
+      // console.log('popped??? next child that is now a parent, from stack');
 
       depth = current.depth;
       if (depth > graph.ilandom.maxDepth) { graph.ilandom.maxDepth = depth; }
+      
       parent = current.element;
       parentNodeId = current.nodeId;
       children = parent.childNodes;

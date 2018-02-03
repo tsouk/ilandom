@@ -85,7 +85,7 @@ const stepTime = 0.2 * SEC; //this one can crash your shizzle
 const nodeSize = 1000;
 const nodeColor = '#' + (Math.floor(Math.random() * 16777215).toString(16) + '000000').substr(0, 6);
 
-events.fire('foo');
+events.fire('foo'); //huh???
 
 function getHtmlNode(domObject) {
   var i = 0;
@@ -100,11 +100,6 @@ function getHtmlNode(domObject) {
 }
 
 function createRoot(graph, domNode) {
-  // Sigma: graphInstance.graph.nodes()
-  // ngrpah: graph.getNodesCount
-  //
-  // Sigma: graph.addNode
-  // Ngraph: graph.addNode
   if (graph.getNodesCount() > 0) {
     console.log("Error creating root object");
     return;
@@ -140,11 +135,12 @@ function recurseBF(graph, treeHeadNode) {
   var childNodeId;
 
   var nodeIntervalId = setInterval(function () {
-    if (current = stack[stackItem++]) {
-      // console.log('popped next child that is now a parent, from stack');
+    if (current = stack.pop()) {
+      // console.log('popped??? next child that is now a parent, from stack');
 
       depth = current.depth;
       if (depth > graph.ilandom.maxDepth) { graph.ilandom.maxDepth = depth; }
+      
       parent = current.element;
       parentNodeId = current.nodeId;
       children = parent.childNodes;
@@ -3947,11 +3943,16 @@ module.exports = function (graph, settings) {
     }
     // todo: this adds GC pressure. Remove functional iterators
     //Object.keys(linkUI).forEach(renderLink);
-    Object.keys(nodeUI).forEach(renderNode);
+    //Object.keys(nodeUI).forEach(renderNode);
     let nodeArray = new Array();
     Object.keys(nodeUI).forEach(function(key) {
-      //let point = [nodeUI[key].pos.x, nodeUI[key].pos.y];
+      renderNode(key);
       nodeArray.push(nodeUI[key]);
+      //  Check if seanode exists and update it's x,y
+      //  else
+      //    check if node is < maxDepth and add seaNode to scene
+      //  add seanode to the nodeUI array ready for the delaunator
+      // set height of node
     });
     //console.log(nodeArray);
     //console.log(nodeArray[4]);
@@ -3969,6 +3970,11 @@ module.exports = function (graph, settings) {
     // delaunay = new Delaunator(nodeUI, (node) => node.pos.x,  (nodeId) => node.pos.y); // doing this whenever nodes are added
     //getDelaunayTriangles(nodeArray);
     let triangles = throttledDelaunatorTriangles(nodeArray);
+    // nodeUI[triangles[i]].data.depth
+    // nodeUI[triangles[i]].data.numberOfChildren
+    // nodeUI[triangles[i]].data.KB
+    // function computeHeight (depth, noChildren, KB) {...}
+
     // also add the seaNodes! remember, there is no LINE rendering now
     // ...maybe the graph has that already
     // YOU CAN push the whole node, or at least add the depth.
