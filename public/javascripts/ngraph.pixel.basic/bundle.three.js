@@ -122,12 +122,12 @@ function recurseBF(graph, treeHeadNode) {
   rootId = createRoot(graph, treeHeadNode);
   events.fire('createRoot');
 
-  var stack = [{
+  var queue = [{
     depth: 0,
     nodeId: rootId,
     element: treeHeadNode
   }];
-  var stackItem = 0; //could use that too
+  var queueItem = 0; //could use that too
   var current;
   var parent;
   var children, i, len;
@@ -135,8 +135,8 @@ function recurseBF(graph, treeHeadNode) {
   var childNodeId;
 
   var nodeIntervalId = setInterval(function () {
-    if (current = stack.pop()) {
-      // console.log('popped??? next child that is now a parent, from stack');
+    if (current = queue.shift()) { // I think queue.pop() does a "show children -> traverse depth first"
+      // console.log('popped??? next child that is now a parent, from queue');
 
       depth = current.depth;
       if (depth > graph.ilandom.maxDepth) { graph.ilandom.maxDepth = depth; }
@@ -150,9 +150,9 @@ function recurseBF(graph, treeHeadNode) {
       if (children) {
         for (i = 0, len = children.length; i < len ; i++) { // (i < len && i < 24) works for simplified iland graphs, but probably should only do that to the head... 
           if (children[i].nodeType === 1) {
-            //console.log('adding child to stack');
+            //console.log('adding child to queue');
             childNodeId = addNewChildNodeToParent(graph, parentNodeId, children[i], depth);
-            stack.push({ //pass args via object or array
+            queue.push({ //pass args via object or array
               element: children[i],
               nodeId: childNodeId,
               depth: depth + 1

@@ -256,12 +256,12 @@
       function recurseBF(graphInstance, treeHeadNode) {
         rootId = createRoot(graphInstance, treeHeadNode);
 
-        var stack = [{
+        var queue = [{
           depth: 0,
           nodeId: rootId,
           element: treeHeadNode
         }];
-        var stackItem = 0; //could use that too
+        var queueItem = 0; //could use that too
         var current;
         var parent;
         var children, i, len;
@@ -274,8 +274,8 @@
             updateStatus('User stopped ForceAtlas2');
             return;
           }
-          if (current = stack[stackItem++]) {
-            //console.log('popping next parent from stack');
+          if (current = queue.shift()) {
+            //console.log('popping next parent from queue');
             depth = current.depth;
             parent = current.element;
             parentNodeId = current.nodeId;
@@ -285,9 +285,9 @@
             if (children) {
               for (i = 0, len = children.length; i < len; i++) {
                 if (children[i].nodeType === 1) {
-                  //console.log('adding child to stack');
+                  //console.log('adding child to queue');
                   childNodeId = addNewChildNodeToParent(graphInstance, parent, parentNodeId, children[i]);
-                  stack.push({ //pass args via object or array
+                  queue.push({ //pass args via object or array
                     element: children[i],
                     nodeId: childNodeId,
                     depth: depth + 1

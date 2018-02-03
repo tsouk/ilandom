@@ -23,18 +23,20 @@ function recurseDF (parent, callback) {
 
 function recurseBF (treeHeadNode, callback) {
     var callback = callback || connectNewChild;
-    var stack = [{
+    var queue = [{
         depth: 0,
         element: treeHeadNode
     }];
-    var stackItem = 0;
+    var queueItem = 0;
     var parent;
     var children, i, len;
     var depth; //not really used here, but I like it
 
     createRoot(treeHeadNode);// this has to be another callback
 
-    while (parent = stack[stackItem++]) {
+    while (parent = queue.shift()) {
+        // console.log('shifted next child that is now a parent, from queue');
+        // for something like DFS ("show children -> traverse depth first") do .pop()
         //get the arguments
         depth = parent.depth;
         parent = parent.element;
@@ -42,7 +44,7 @@ function recurseBF (treeHeadNode, callback) {
         for (i = 0, len = children.length; i < len; i++) {
             //breadth first, each depth level goes first
             callback(parent, children[i]);
-            stack.push({
+            queue.push({
                 element: children[i],
                 depth: depth + 1
             });
