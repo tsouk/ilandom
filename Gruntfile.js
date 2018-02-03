@@ -14,7 +14,7 @@ module.exports = function (grunt) {
         {
           expand: true,
           cwd: 'ngraph.pixel/demo/basic/',
-          src: ['bundle.js'],
+          src: ['bundle*.js'],
           dest: 'public/javascripts/ngraph.pixel.basic'
         }]
       }

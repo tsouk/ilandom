@@ -1,0 +1,26 @@
+<style>
+  body {
+    width: 100%;
+    height : 100%;
+    position: absolute;
+    overflow: hidden;
+    padding: 0;
+    margin: 0;
+  }
+</style>
+<div class="html2graph-info" >
+    <h3>{{{hud}}}</h3>
+    <div>
+        <p class="attribution">
+            <em>...made by <a href="https://twitter.com/tsoukn">tsouk</a> with <a href="https://github.com/anvaka/ngraph">ngraph</a></em>
+        </p>
+    </div>
+</div>
+<link rel='stylesheet' href='/stylesheets/html2graph.css' />
+<script src="/javascripts/ngraph.pixel.basic/bundle.three.js"></script>
+<script src="/javascripts/getUrlAndParseJson.js"></script>
+<script>
+  var graphOptions = {};
+  window.getUrlAndParseJson('/html2graphJSON?url={{url}}', window.start3dgraph, graphOptions );
+  //window.getUrlAndParseJson({{url}}, window.start3dgraph );
+</script>

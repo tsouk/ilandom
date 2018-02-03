@@ -1,8 +1,8 @@
 # "no DOM is an iland"
 
 ## TODO
-
-### remove openshift stuff
+1. Remove that flavour bit and do everything in options... hanami, etc.
+1. remove openshift stuff
 
 ### Service
 Service that responds with JSON of `nodes + data + x,y` and `edges + data` for:
@@ -30,12 +30,14 @@ The client can then use:
 
 The service can then be called by something like Unity
 
-### Testing
-- can test with localhost, so just have some basic html pages served on a couple of endpoints.
-
 ### Roadmap
-1. Move to service architecture
-1. Make test pages
-1. Implement simple d3 ngraph approach
-1. Implement 2d ngraph
-1. Look into cytoscape
+- [x] Move to service architecture - v1
+- [x] Make test pages (Currently if the service has no connectivity to the net, it will load a hardcoded tsouk.com JSON response)
+- [x] Implement simple 3d ngraph approach
+- [x] Implement 2d ngraph
+- [ ] island implementation
+- [ ] Remove that flavour stuff
+- [ ] 3d Hanami for Hanami season...
+- [ ] Look into cytoscape
+- [ ] Upgrade to Node9
+- [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 

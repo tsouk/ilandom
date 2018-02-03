@@ -1,0 +1,270 @@
+{
+  "nodeType": 9,
+  "nodeName": "#document",
+  "childNodes": [{
+      "nodeType": 10,
+      "nodeName": "html"
+    },
+    {
+      "nodeType": 1,
+      "tagName": "html",
+      "attributes": [],
+      "nodeData": "\n  ",
+      "nodeBytes": 3,
+      "childNodes": [{
+          "nodeType": 1,
+          "tagName": "head",
+          "attributes": [],
+          "nodeData": "\n  ",
+          "nodeBytes": 3,
+          "childNodes": [{
+              "nodeType": 1,
+              "tagName": "script",
+              "attributes": [],
+              "nodeData": "\n      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){\n      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),\n      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)\n      })(window,document,'script','//www.google-analytics.com/analytics.js','ga');\n\n      ga('create', 'UA-5606768-1', 'auto');\n      ga('send', 'pageview');\n\n    ",
+              "nodeBytes": 418,
+              "childNodes": []
+            },
+            {
+              "nodeType": 1,
+              "tagName": "title",
+              "attributes": [],
+              "nodeData": "Experiments on (mostly) coding, by Nikos Tsouknidas",
+              "nodeBytes": 51,
+              "childNodes": []
+            },
+            {
+              "nodeType": 1,
+              "tagName": "link",
+              "attributes": [
+                [
+                  "rel",
+                  "stylesheet"
+                ],
+                [
+                  "href",
+                  "/stylesheets/style.css"
+                ]
+              ]
+            }
+          ]
+        },
+        {
+          "nodeType": 1,
+          "tagName": "body",
+          "attributes": [],
+          "nodeData": "\n  \n\n",
+          "nodeBytes": 5,
+          "childNodes": [{
+              "nodeType": 1,
+              "tagName": "h1",
+              "attributes": [],
+              "nodeData": "Experiments on (mostly) coding, by Nikos Tsouknidas",
+              "nodeBytes": 51,
+              "childNodes": []
+            },
+            {
+              "nodeType": 1,
+              "tagName": "ul",
+              "attributes": [],
+              "nodeData": "\n",
+              "nodeBytes": 1,
+              "childNodes": [{
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "nodeData": "! :: made with ",
+                  "nodeBytes": 15,
+                  "childNodes": [{
+                      "nodeType": 1,
+                      "tagName": "a",
+                      "attributes": [
+                        [
+                          "href",
+                          "/html2graph"
+                        ]
+                      ],
+                      "nodeData": "see any webpage as a Force Directed Graph",
+                      "nodeBytes": 41,
+                      "childNodes": []
+                    },
+                    {
+                      "nodeType": 1,
+                      "tagName": "a",
+                      "attributes": [
+                        [
+                          "href",
+                          "http://sigmajs.org/"
+                        ]
+                      ],
+                      "nodeData": "sigma.js",
+                      "nodeBytes": 8,
+                      "childNodes": []
+                    }
+                  ]
+                },
+                {
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "nodeData": "! :: made with ",
+                  "nodeBytes": 15,
+                  "childNodes": [{
+                      "nodeType": 1,
+                      "tagName": "a",
+                      "attributes": [
+                        [
+                          "href",
+                          "/html2graph/hanami"
+                        ]
+                      ],
+                      "nodeData": "see any webpage as a Hanami Graph",
+                      "nodeBytes": 33,
+                      "childNodes": []
+                    },
+                    {
+                      "nodeType": 1,
+                      "tagName": "a",
+                      "attributes": [
+                        [
+                          "href",
+                          "http://sigmajs.org/"
+                        ]
+                      ],
+                      "nodeData": "sigma.js",
+                      "nodeBytes": 8,
+                      "childNodes": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "nodeType": 1,
+              "tagName": "h2",
+              "attributes": [],
+              "nodeData": "Other things I do",
+              "nodeBytes": 17,
+              "childNodes": []
+            },
+            {
+              "nodeType": 1,
+              "tagName": "p",
+              "attributes": [],
+              "nodeData": "If you're looking for the sketches, the comic books, and the videos",
+              "nodeBytes": 67,
+              "childNodes": []
+            },
+            {
+              "nodeType": 1,
+              "tagName": "ul",
+              "attributes": [],
+              "nodeData": "\n",
+              "nodeBytes": 1,
+              "childNodes": [{
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "childNodes": [{
+                    "nodeType": 1,
+                    "tagName": "a",
+                    "attributes": [
+                      [
+                        "href",
+                        "http://www.ilandcomic.co.uk/"
+                      ]
+                    ],
+                    "nodeData": " cyclad-punk comic in alternative 1830s",
+                    "nodeBytes": 39,
+                    "childNodes": [{
+                      "nodeType": 1,
+                      "tagName": "strong",
+                      "attributes": [],
+                      "nodeData": "iland",
+                      "nodeBytes": 5,
+                      "childNodes": []
+                    }]
+                  }]
+                },
+                {
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "nodeData": " wordpress blog",
+                  "nodeBytes": 15,
+                  "childNodes": [{
+                    "nodeType": 1,
+                    "tagName": "a",
+                    "attributes": [
+                      [
+                        "href",
+                        "https://tsouk.wordpress.com/"
+                      ]
+                    ],
+                    "nodeData": "i wished i could draw",
+                    "nodeBytes": 21,
+                    "childNodes": []
+                  }]
+                },
+                {
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "childNodes": [{
+                    "nodeType": 1,
+                    "tagName": "a",
+                    "attributes": [
+                      [
+                        "href",
+                        "https://www.youtube.com/user/theunderscorephx/videos"
+                      ]
+                    ],
+                    "nodeData": "youtube videos",
+                    "nodeBytes": 14,
+                    "childNodes": []
+                  }]
+                },
+                {
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "childNodes": [{
+                    "nodeType": 1,
+                    "tagName": "a",
+                    "attributes": [
+                      [
+                        "href",
+                        "https://www.instagram.com/tsouk.n/"
+                      ]
+                    ],
+                    "nodeData": "instagram",
+                    "nodeBytes": 9,
+                    "childNodes": []
+                  }]
+                },
+                {
+                  "nodeType": 1,
+                  "tagName": "li",
+                  "attributes": [],
+                  "childNodes": [{
+                    "nodeType": 1,
+                    "tagName": "a",
+                    "attributes": [
+                      [
+                        "href",
+                        "https://www.facebook.com/n.tsouk"
+                      ]
+                    ],
+                    "nodeData": "facebook page",
+                    "nodeBytes": 13,
+                    "childNodes": []
+                  }]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

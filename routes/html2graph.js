@@ -6,34 +6,38 @@ const ilandomWinston = require(path.join(global.__base, 'lib/ilandom-winston-log
 const logger = ilandomWinston.getLogger('html2graph');
 
 /* GET home page. */
-router.get(['/', '/:flavour'], function (req, res, next) {
-  let flavour = !req.params.flavour ? 'force directed' : req.params.flavour;
+router.get(['/'], function (req, res, next) {
   res.render('html2graphinput', {
-    title: 'Which webpage do you want to see as a ' + flavour + ' graph?',
-    flavour: flavour
+    title: `Which webpage do you want to see as a...`
   });
 });
 
 /* Render HTML 2 GRAPH */
-router.post(['/', '/:flavour'], function (req, res) {
+router.post(['/'], function (req, res) {
   let url = req.body.url;
   let dimensions = req.body.dimensions;
 
   // html2JSON does url validation also, but we need this here to reply to the user
   if (validator.isURL(url)) {
     url = addhttp(url);
-    if (dimensions === '2') {
-      view = req.params.flavour == 'force directed' ? 'html2graph' : 'html2' + req.params.flavour;
-      res.render(view, {
+    if (dimensions === '2d') {
+      res.render('html2graph', {
         title: 'Html to Graph',
-        hud: 'The Force Directed Graph for <br>' + validator.escape(url),
+        hud: `The Force Directed Graph for <br>${validator.escape(url)}`,
         url: url
       });
     }
-    else if (dimensions === '3') {
+    else if (dimensions === '3d') {
       res.render('html2ngraph', {
         title: 'Html2Ngraph',
-        hud: 'The 3D Force Directed Graph for <br>' + validator.escape(url),
+        hud: `The 3D Force Directed Graph for <br>${validator.escape(url)}`,
+        url: url
+      });
+    }
+    else if (dimensions === 'island') {
+      res.render('html2ngraph-island', {
+        title: 'ilanDom',
+        hud: `${validator.escape(url)}<br> as an island!`,
         url: url
       });
     }
@@ -51,7 +55,7 @@ router.post(['/', '/:flavour'], function (req, res) {
 
 function addhttp(url) {
   if (!/^https?\:\/\//.test(url)) {
-    url = "http://" + url;
+    url = `http://${url}`;
   }
   return url;
 }
