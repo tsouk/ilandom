@@ -42,3 +42,5 @@ The service can then be called by something like Unity
 - [ ] Upgrade to Node9
 - [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 
 - [ ] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
+- [ ] ADD SOUND!
+- [ ] ALPHA SHAPES: https://github.com/mikolalysenko/alpha-shape

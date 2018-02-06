@@ -1513,8 +1513,10 @@ function recurseBF(graph, treeHeadNode) {
   var childNodeId;
 
   var nodeIntervalId = setInterval(function () {
-    if (current = queue.shift()) { // I think queue.pop() does a "show children -> traverse depth first"
-      // console.log('popped??? next child that is now a parent, from queue');
+    if (current = queue.shift()) {
+      let hasNoType1Children = true;
+      // console.log('shifted next child that is now a parent, from queue');
+      // for something like DFS ("show children -> traverse depth first") do .pop()
 
       depth = current.depth;
       if (depth > graph.ilandom.maxDepth) { graph.ilandom.maxDepth = depth; }
@@ -1525,9 +1527,10 @@ function recurseBF(graph, treeHeadNode) {
 
       //I should probably check for ...
       // TODO: only go through children that are type 1?
-      if (children) {
-        for (i = 0, len = children.length; i < len ; i++) { // (i < len && i < 24) works for simplified iland graphs, but probably should only do that to the head... 
-          if (children[i].nodeType === 1) {
+      if ( children ) {
+        for ( i = 0, len = children.length; i < len ; i++ ) { // (i < len && i < 24) works for simplified iland graphs, but probably should only do that to the head... 
+          if ( children[i].nodeType === 1 ) {
+            hasNoType1Children = false;
             //console.log('adding child to queue');
             childNodeId = addNewChildNodeToParent(graph, parentNodeId, children[i], depth);
             queue.push({ //pass args via object or array
@@ -1538,6 +1541,12 @@ function recurseBF(graph, treeHeadNode) {
           }
         }
       }
+
+      // Not sure I want to do that here...
+      // if (hasNoType1Children)  {
+      //   console.log(`${parentNodeId}: needs a Sea Node!`);
+      //   graph.getNode(parentNodeId).data.needSeaNode = true;
+      // }
     } else {
       clearInterval(nodeIntervalId);
       events.fire('cleared');
@@ -1565,7 +1574,7 @@ function addNewChildNodeToParent(graph, parentNodeId, child, depth) {
     justAddedNode.data.depth = depth + 1;
   }
   else {
-    justAddedNode.data = {depth: depth + 1, numberOfChildren: 0};
+    justAddedNode.data = {depth: depth + 1, numberOfChildren: 0, needSeaNode: false};
   }
 
   events.fire('added', parentNodeId, childNodeId);
