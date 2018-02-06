@@ -4108,7 +4108,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
     positions = new Float32Array( maxParticleCount * 6 * 3 ); // not sure about this number
 
-    var faceColor = new THREE.Color( 0xbc632b );
+    var faceColor = new THREE.Color( 0x00cd99 );
     colors = new Float32Array( maxParticleCount * 6 * 3 );
     for (let index = 0; index < colors.length; index += 3) {
       colors[index] = faceColor.r;
