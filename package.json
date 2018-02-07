@@ -28,7 +28,6 @@
     "ngraph.forcelayout": "^0.2.1",
     "ngraph.forcelayout3d": "0.0.16",
     "ngraph.graph": "0.0.14",
-    "ngraph.pixel": "tsouk/ngraph.pixel",
     "ngraph.three": "tsouk/ngraph.three",
     "prettyjson": "^1.1.3",
     "request": "^2.69.0",
