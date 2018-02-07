@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "bundle-ngraph": "browserify src/entry_points/index.js > public/javascripts/ngraph.bundles/bundle.js && browserify src/entry_points/index.three.js > public/javascripts/ngraph.bundles/bundle.three.js",
-    "build": "grunt build"
+    "build-sigma": "grunt build"
   },
   "main": "./bin/www",
   "repository": {

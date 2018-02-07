@@ -10,12 +10,6 @@ module.exports = function (grunt) {
             'plugins/sigma.plugins.animate.min.js'
           ],
           dest: 'public/javascripts/sigma'
-        },
-        {
-          expand: true,
-          cwd: 'ngraph.pixel/demo/basic/',
-          src: ['bundle*.js'],
-          dest: 'public/javascripts/ngraph.pixel.basic'
         }]
       }
     },
@@ -25,14 +19,6 @@ module.exports = function (grunt) {
           cmd: 'run',
           args: ['build'],
           cwd: 'sigma.js/'
-        }
-      },
-
-      pixel: {
-        options: {
-          cmd: 'run',
-          args: ['basic'],
-          cwd: 'ngraph.pixel/'
         }
       },
     }
