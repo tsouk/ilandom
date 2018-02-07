@@ -4,7 +4,6 @@ const recurseBF = require('../../lib/recurseBFngraph-three');
 const eventify = require('ngraph.events');
 const nthree = require('ngraph.three');
 const THREE = require('three');
-
 const MAX_CHILDREN_PER_NODE = 12;
 
 // Configure
@@ -17,26 +16,16 @@ var physicsSettings = {
   timeStep: 10
 };
 
-
 function start3dgraph (data) {
-  // What is the max number of nodes?
   let maxDepth = recurseBF.findMaxDepth(recurseBF.getHtmlNode(data), MAX_CHILDREN_PER_NODE);
   let maxParticleCount = recurseBF.getChildrenCount();
 
   var layout3d = require('ngraph.forcelayout3d');
-  var layout2d = layout3d.get2dLayout; // this on it's own is not enough, you need to tell the rendering function to set the z=0
+  var layout2d = layout3d.get2dLayout;
   var graphics = nthree(graph, {physicsSettings : physicsSettings, layout: layout2d(graph, physicsSettings)}, maxParticleCount, maxDepth);
-  const threeGraphics = require('../../lib/threeGraphics')(graph, graphics.scene);
-  graphics.createNodeUI(threeGraphics.createNodeUI);
-  graphics.createLinkUI(threeGraphics.createLinkUI);
-  graphics.renderNode(threeGraphics.nodeRenderer);
-  graphics.renderLink(threeGraphics.linkRenderer);
 
-  graphics.scene.fog = new graphics.THREE.FogExp2( 0xccccee, 0.001 );
-  graphics.scene.background = new graphics.THREE.Color( 0xeeeeee );
   graphics.run(); // begin animation loop
-  //graphics.setMaxDepth(maxDepth);
-  //graphics.setMaxParticleCount(recurseBF.getChildrenCount());
+
   recurseBF.recurseBF(graph, recurseBF.getHtmlNode(data), MAX_CHILDREN_PER_NODE);
   
   recurseBF.events.on('added', function( parentNodeId, childNodeId ) {
@@ -45,16 +34,17 @@ function start3dgraph (data) {
 
   recurseBF.events.on('cleared', function() {
     console.log(`Finished adding nodes, stable, maxDepth: ${maxDepth}`);
-    graphics.isStable();
+    setTimeout(() => {
+      graphics.isStable();
+    }, 1000);   
   });
 }
 
 if (window) {
   window.start3dgraph = start3dgraph;
-  //window.scene = graphics.scene;
   window.THREE = THREE;
 }
-},{"../../lib/recurseBFngraph-three":2,"../../lib/threeGraphics":3,"ngraph.events":8,"ngraph.forcelayout3d":11,"ngraph.graph":17,"ngraph.three":36,"three":44}],2:[function(require,module,exports){
+},{"../../lib/recurseBFngraph-three":2,"ngraph.events":7,"ngraph.forcelayout3d":10,"ngraph.graph":16,"ngraph.three":35,"three":42}],2:[function(require,module,exports){
 // ----------- Lib ---------------
 
 var eventify = require('ngraph.events');
@@ -152,7 +142,7 @@ function recurseBF(graph, treeHeadNode, MAX_CHILDREN_PER_NODE = Infinity) {
       // Not sure I want to do that here...
       if (hasNoType1Children)  {
         //console.log(`${parentNodeId}: needs a Sea Node!`);
-        addNewChildNodeToParent(graph, parentNodeId, 'seaNode', maxDepth);
+        addNewChildNodeToParent(graph, parentNodeId, {tagName: 'seaNode'}, maxDepth);
         //graph.getNode(parentNodeId).data.needSeaNode = true;
       }
     } else {
@@ -259,141 +249,7 @@ module.exports = {
   hashCode,
   intToRGB,
 };
-},{"ngraph.events":8}],3:[function(require,module,exports){
-/**
- * This module provides default settings for three.js graphics. There are a lot
- * of possible configuration parameters, and this file provides reasonable defaults
- */
-const THREE = require('three');
-
-module.exports = function (graph, scene) {
-  const NODE_SIZE = 5; // default size of a node square
-  const HEIGHT_STEP = 60;
-  let maxDepth = 0;
-
-  //var nodeMaterial = new THREE.MeshPhongMaterial({ color: 0xff0000 , specular: 0x111111});
-  var nodeMaterial = new THREE.MeshBasicMaterial({color: 0xff0000});
-  //var nodeGeometry = new THREE.CylinderGeometry( 0, NODE_SIZE*3, NODE_SIZE*3, 3, 1 );
-  var nodeGeometry = new THREE.BoxGeometry(NODE_SIZE, NODE_SIZE, NODE_SIZE);
-  
-  var threeGraphics = {
-    /**
-     * Default node UI creator. Renders a cube
-     */
-    createNodeUI: createNodeUI,
-
-    /**
-     * Default link UI creator. Renders a line
-     **/
-    createLinkUI: createLinkUI,
-
-    /**
-     * Updates cube position
-     */
-    nodeRenderer: nodeRenderer,
-
-    /**
-     * Updates line position
-     */
-    linkRenderer: linkRenderer,
-
-    /**
-     * Updates maxDepth value
-     */
-    setMaxDepth: setMaxDepth
-  }
-  return threeGraphics;
-
-  //TODO: Create a point cloud, that updates every time the nodeRenderer is called.
-
-
-  function createNodeUI(node) {
-    //console.log('During AddLink');
-    let depth = (node.links &&
-      node.links.length > 0 &&
-      node.links[0].data &&
-      node.links[0].data.depthOfChild) ? node.links[0].data.depthOfChild : 0;
-    //console.log(`Depth from link is: ${depth}`);
-
-    var mesh = new THREE.Mesh(nodeGeometry, nodeMaterial);
-    mesh.userData.depth = depth;
-    mesh.userData.nodeID = node.id;
-    mesh.userData.seaNodeMesh = null;
-    //mesh.userData.seaNodeMesh = new THREE.Mesh(nodeGeometry, nodeMaterial);
-    return mesh;
-  }
-
-  function createLinkUI(link) {
-    var linkGeometry = new THREE.Geometry();
-    // we don't care about position here. linkRenderer will update it
-    linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-    //linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-
-    var linkMaterial = new THREE.LineBasicMaterial({
-      color: 0x0000FF
-    });
-    var line = new THREE.Line(linkGeometry, linkMaterial);
-    line.userData.depthOfChild = link.data.depthOfChild;
-    line.userData.lineToSea = false;
-    return line;
-  }
-
-  // This function is called EVERY frame. Be nice.
-  function nodeRenderer(node) {
-    node.position.x = node.pos.x;
-    node.position.y = node.pos.y;
-    if (!node.heighIsset) { //update every frame, based on depth, no. of children, data
-      node.position.z = getNodeHeight(node);
-      node.heighIsset = true;
-    }
-
-    if ((graph.getNode(node.userData.nodeID).data.numberOfChildren === 0) && (node.userData.depth < maxDepth) && (node.userData.seaNodeMesh === null)) {
-      node.userData.seaNodeMesh = new THREE.Mesh(nodeGeometry, nodeMaterial);
-      scene.add(node.userData.seaNodeMesh);
-      //console.log(seaNode);
-      seaNode = node.userData.seaNodeMesh;
-      seaNode.position.x = node.pos.x;
-      seaNode.position.y = node.pos.y;
-      seaNode.position.z = -1 * maxDepth * HEIGHT_STEP;
-    }
-    else if ((graph.getNode(node.userData.nodeID).data.numberOfChildren === 0) && (node.userData.depth < maxDepth)){
-      seaNode = node.userData.seaNodeMesh;
-      seaNode.position.x = node.pos.x;
-      seaNode.position.y = node.pos.y;
-      seaNode.position.z = -1 * maxDepth * HEIGHT_STEP;
-    }
-
-    //console.log(`x: ${node.pos.x}, y: ${node.pos.y}, z: ${node.pos.z}`);
-  }
-
-  function linkRenderer(link) {
-    var from = link.from;
-    var to = link.to;
-    link.geometry.vertices[0].set(from.x, from.y, -1 * (link.userData.depthOfChild - 1) * HEIGHT_STEP);
-    link.geometry.vertices[1].set(to.x, to.y, -1 * (link.userData.depthOfChild) * HEIGHT_STEP);
-
-    // if (link.userData.depthOfChild < maxDepth) {
-    //   link.geometry.vertices[2].set(to.x, to.y, -1 * (maxDepth) * HEIGHT_STEP);
-    // } else {
-    //   link.geometry.vertices[2].set(to.x, to.y, -1 * (link.userData.depthOfChild) * HEIGHT_STEP);
-    // }
-
-    link.geometry.verticesNeedUpdate = true;
-  }
-
-  // tsouk from here onwards
-  function getNodeHeight(node) {
-    return (-1 * node.userData.depth * HEIGHT_STEP);
-  }
-
-  function setMaxDepth(depth) {
-    maxDepth = depth;
-  }
-
-
-}
-},{"three":44}],4:[function(require,module,exports){
+},{"ngraph.events":7}],3:[function(require,module,exports){
 "use strict"
 
 var dup = require("dup")
@@ -462,7 +318,7 @@ function circumcenter(points) {
 
 circumcenter.barycenetric = barycentricCircumcenter
 module.exports = circumcenter
-},{"dup":7,"robust-linear-solve":40}],5:[function(require,module,exports){
+},{"dup":6,"robust-linear-solve":38}],4:[function(require,module,exports){
 module.exports = circumradius
 
 var circumcenter = require('circumcenter')
@@ -478,7 +334,7 @@ function circumradius(points) {
   }
   return Math.sqrt(avgDist / points.length)
 }
-},{"circumcenter":4}],6:[function(require,module,exports){
+},{"circumcenter":3}],5:[function(require,module,exports){
 'use strict';
 
 module.exports = Delaunator;
@@ -921,7 +777,7 @@ function defaultGetY(p) {
     return p[1];
 }
 
-},{}],7:[function(require,module,exports){
+},{}],6:[function(require,module,exports){
 "use strict"
 
 function dupe_array(count, value, i) {
@@ -971,7 +827,7 @@ function dupe(count, value) {
 }
 
 module.exports = dupe
-},{}],8:[function(require,module,exports){
+},{}],7:[function(require,module,exports){
 module.exports = function(subject) {
   validateSubject(subject);
 
@@ -1061,7 +917,7 @@ function validateSubject(subject) {
   }
 }
 
-},{}],9:[function(require,module,exports){
+},{}],8:[function(require,module,exports){
 module.exports = exposeProperties;
 
 /**
@@ -1107,7 +963,7 @@ function augment(source, target, key) {
   }
 }
 
-},{}],10:[function(require,module,exports){
+},{}],9:[function(require,module,exports){
 module.exports = createLayout;
 module.exports.simulator = require('ngraph.physics.simulator');
 
@@ -1422,7 +1278,7 @@ function createLayout(graph, physicsSettings) {
 
 function noop() { }
 
-},{"ngraph.events":8,"ngraph.physics.simulator":20}],11:[function(require,module,exports){
+},{"ngraph.events":7,"ngraph.physics.simulator":19}],10:[function(require,module,exports){
 /**
  * This module provides all required forces to regular ngraph.physics.simulator
  * to make it 3D simulator. Ideally ngraph.physics.simulator should operate
@@ -1446,7 +1302,7 @@ function createLayout(graph, physicsSettings) {
   return createLayout.get2dLayout(graph, physicsSettings);
 }
 
-},{"./lib/bounds":12,"./lib/createBody":13,"./lib/dragForce":14,"./lib/eulerIntegrator":15,"./lib/springForce":16,"ngraph.forcelayout":10,"ngraph.merge":18,"ngraph.quadtreebh3d":31}],12:[function(require,module,exports){
+},{"./lib/bounds":11,"./lib/createBody":12,"./lib/dragForce":13,"./lib/eulerIntegrator":14,"./lib/springForce":15,"ngraph.forcelayout":9,"ngraph.merge":17,"ngraph.quadtreebh3d":30}],11:[function(require,module,exports){
 module.exports = function (bodies, settings) {
   var random = require('ngraph.random').random(42);
   var boundingBox =  { x1: 0, y1: 0, z1: 0, x2: 0, y2: 0, z2: 0 };
@@ -1545,14 +1401,14 @@ module.exports = function (bodies, settings) {
   }
 };
 
-},{"ngraph.random":35}],13:[function(require,module,exports){
+},{"ngraph.random":34}],12:[function(require,module,exports){
 var physics = require('ngraph.physics.primitives');
 
 module.exports = function(pos) {
   return new physics.Body3d(pos);
 }
 
-},{"ngraph.physics.primitives":19}],14:[function(require,module,exports){
+},{"ngraph.physics.primitives":18}],13:[function(require,module,exports){
 /**
  * Represents 3d drag force, which reduces force value on each step by given
  * coefficient.
@@ -1582,7 +1438,7 @@ module.exports = function (options) {
   return api;
 };
 
-},{"ngraph.expose":9,"ngraph.merge":18}],15:[function(require,module,exports){
+},{"ngraph.expose":8,"ngraph.merge":17}],14:[function(require,module,exports){
 /**
  * Performs 3d forces integration, using given timestep. Uses Euler method to solve
  * differential equation (http://en.wikipedia.org/wiki/Euler_method ).
@@ -1632,7 +1488,7 @@ function integrate(bodies, timeStep) {
   return (tx * tx + ty * ty + tz * tz)/bodies.length;
 }
 
-},{}],16:[function(require,module,exports){
+},{}],15:[function(require,module,exports){
 /**
  * Represents 3d spring force, which updates forces acting on two bodies, conntected
  * by a spring.
@@ -1688,7 +1544,7 @@ module.exports = function (options) {
   return api;
 }
 
-},{"ngraph.expose":9,"ngraph.merge":18,"ngraph.random":35}],17:[function(require,module,exports){
+},{"ngraph.expose":8,"ngraph.merge":17,"ngraph.random":34}],16:[function(require,module,exports){
 /**
  * @fileOverview Contains definition of the core graph object.
  */
@@ -2267,7 +2123,7 @@ function makeLinkId(fromId, toId) {
   return hashCode(fromId.toString() + '👉 ' + toId.toString());
 }
 
-},{"ngraph.events":8}],18:[function(require,module,exports){
+},{"ngraph.events":7}],17:[function(require,module,exports){
 module.exports = merge;
 
 /**
@@ -2300,7 +2156,7 @@ function merge(target, options) {
   return target;
 }
 
-},{}],19:[function(require,module,exports){
+},{}],18:[function(require,module,exports){
 module.exports = {
   Body: Body,
   Vector2d: Vector2d,
@@ -2367,7 +2223,7 @@ Vector3d.prototype.reset = function () {
   this.x = this.y = this.z = 0;
 };
 
-},{}],20:[function(require,module,exports){
+},{}],19:[function(require,module,exports){
 /**
  * Manages a simulation of physical forces acting on bodies and springs.
  */
@@ -2645,7 +2501,7 @@ function physicsSimulator(settings) {
   }
 };
 
-},{"./lib/bounds":21,"./lib/createBody":22,"./lib/dragForce":23,"./lib/eulerIntegrator":24,"./lib/spring":25,"./lib/springForce":26,"ngraph.events":8,"ngraph.expose":9,"ngraph.merge":18,"ngraph.quadtreebh":27}],21:[function(require,module,exports){
+},{"./lib/bounds":20,"./lib/createBody":21,"./lib/dragForce":22,"./lib/eulerIntegrator":23,"./lib/spring":24,"./lib/springForce":25,"ngraph.events":7,"ngraph.expose":8,"ngraph.merge":17,"ngraph.quadtreebh":26}],20:[function(require,module,exports){
 module.exports = function (bodies, settings) {
   var random = require('ngraph.random').random(42);
   var boundingBox =  { x1: 0, y1: 0, x2: 0, y2: 0 };
@@ -2727,14 +2583,14 @@ module.exports = function (bodies, settings) {
   }
 }
 
-},{"ngraph.random":35}],22:[function(require,module,exports){
+},{"ngraph.random":34}],21:[function(require,module,exports){
 var physics = require('ngraph.physics.primitives');
 
 module.exports = function(pos) {
   return new physics.Body(pos);
 }
 
-},{"ngraph.physics.primitives":19}],23:[function(require,module,exports){
+},{"ngraph.physics.primitives":18}],22:[function(require,module,exports){
 /**
  * Represents drag force, which reduces force value on each step by given
  * coefficient.
@@ -2763,7 +2619,7 @@ module.exports = function (options) {
   return api;
 };
 
-},{"ngraph.expose":9,"ngraph.merge":18}],24:[function(require,module,exports){
+},{"ngraph.expose":8,"ngraph.merge":17}],23:[function(require,module,exports){
 /**
  * Performs forces integration, using given timestep. Uses Euler method to solve
  * differential equation (http://en.wikipedia.org/wiki/Euler_method ).
@@ -2810,7 +2666,7 @@ function integrate(bodies, timeStep) {
   return (tx * tx + ty * ty)/max;
 }
 
-},{}],25:[function(require,module,exports){
+},{}],24:[function(require,module,exports){
 module.exports = Spring;
 
 /**
@@ -2826,7 +2682,7 @@ function Spring(fromBody, toBody, length, coeff, weight) {
     this.weight = typeof weight === 'number' ? weight : 1;
 };
 
-},{}],26:[function(require,module,exports){
+},{}],25:[function(require,module,exports){
 /**
  * Represents spring force, which updates forces acting on two bodies, conntected
  * by a spring.
@@ -2878,7 +2734,7 @@ module.exports = function (options) {
   return api;
 }
 
-},{"ngraph.expose":9,"ngraph.merge":18,"ngraph.random":35}],27:[function(require,module,exports){
+},{"ngraph.expose":8,"ngraph.merge":17,"ngraph.random":34}],26:[function(require,module,exports){
 /**
  * This is Barnes Hut simulation algorithm for 2d case. Implementation
  * is highly optimized (avoids recusion and gc pressure)
@@ -3204,7 +3060,7 @@ function setChild(node, idx, child) {
   else if (idx === 3) node.quad3 = child;
 }
 
-},{"./insertStack":28,"./isSamePosition":29,"./node":30,"ngraph.random":35}],28:[function(require,module,exports){
+},{"./insertStack":27,"./isSamePosition":28,"./node":29,"ngraph.random":34}],27:[function(require,module,exports){
 module.exports = InsertStack;
 
 /**
@@ -3248,7 +3104,7 @@ function InsertStackElement(node, body) {
     this.body = body; // physical body which needs to be inserted to node
 }
 
-},{}],29:[function(require,module,exports){
+},{}],28:[function(require,module,exports){
 module.exports = function isSamePosition(point1, point2) {
     var dx = Math.abs(point1.x - point2.x);
     var dy = Math.abs(point1.y - point2.y);
@@ -3256,7 +3112,7 @@ module.exports = function isSamePosition(point1, point2) {
     return (dx < 1e-8 && dy < 1e-8);
 };
 
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 /**
  * Internal data structure to represent 2D QuadTree node
  */
@@ -3288,7 +3144,7 @@ module.exports = function Node() {
   this.right = 0;
 };
 
-},{}],31:[function(require,module,exports){
+},{}],30:[function(require,module,exports){
 /**
  * This is Barnes Hut simulation algorithm for 3d case. Implementation
  * is highly optimized (avoids recusion and gc pressure)
@@ -3683,7 +3539,7 @@ function setChild(node, idx, child) {
   else if (idx === 7) node.quad7 = child;
 }
 
-},{"./insertStack":32,"./isSamePosition":33,"./node":34,"ngraph.random":35}],32:[function(require,module,exports){
+},{"./insertStack":31,"./isSamePosition":32,"./node":33,"ngraph.random":34}],31:[function(require,module,exports){
 module.exports = InsertStack;
 
 /**
@@ -3727,7 +3583,7 @@ function InsertStackElement(node, body) {
     this.body = body; // physical body which needs to be inserted to node
 }
 
-},{}],33:[function(require,module,exports){
+},{}],32:[function(require,module,exports){
 module.exports = function isSamePosition(point1, point2) {
     var dx = Math.abs(point1.x - point2.x);
     var dy = Math.abs(point1.y - point2.y);
@@ -3736,7 +3592,7 @@ module.exports = function isSamePosition(point1, point2) {
     return (dx < 1e-8 && dy < 1e-8 && dz < 1e-8);
 };
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 /**
  * Internal data structure to represent 3D QuadTree node
  */
@@ -3780,7 +3636,7 @@ module.exports = function Node() {
   this.back = 0;
 };
 
-},{}],35:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 module.exports = {
   random: random,
   randomIterator: randomIterator
@@ -3867,7 +3723,7 @@ function randomIterator(array, customRandom) {
     };
 }
 
-},{}],36:[function(require,module,exports){
+},{}],35:[function(require,module,exports){
 const THREE = require('three');
 const delaunator = require('delaunator');
 const circumradius = require('circumradius');
@@ -3896,13 +3752,10 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
   let throttledDelaunatorTriangles = _.throttle(getDelaunayTriangles, DEL_THROTTLE);
   let nodeArray = [];
   let triangles = [];
-  //let maxDepth = 0;
 
   // -------- Particles ----------
   var group;
   var pointCloud;
-  //var maxParticleCount = 69; //TODO: get the right number from recurseBF. IT IS KNOWN!
-  var particleCount = 0; // TODO: DO THISSS!!!
   var particlesData = [];
   var particlePositions;
   var linesMesh;
@@ -3912,18 +3765,8 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
   var r = 800;
   var rHalf = r / 2;
 
-
-
-  
   // -------------------------------------------------------
-
-
-  var defaults = require('./lib/defaults');
-
-  // Default callbacks to build/render nodes and links
-  var nodeUIBuilder, nodeRenderer, linkUIBuilder, linkRenderer;
-
-  var nodeUI, linkUI; // Storage for UI of nodes/links
+  var nodeUI; // Storage for UI of nodes/links
   var controls = { update: function noop() {} };
 
   var graphics = {
@@ -3961,7 +3804,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
      * @returns {object} this for chaining.
      */
     createNodeUI : function (createNodeUICallback) {
-      nodeUIBuilder = createNodeUICallback;
+      //nodeUIBuilder = createNodeUICallback;
       rebuildUI();
       return this;
     },
@@ -3972,70 +3815,6 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
      */
     rebuild : function () {
       rebuildUI();
-    },
-
-    /**
-     * This callback is called by graphics when it wants to render node on
-     * a screen.
-     *
-     * @callback renderNodeCallback
-     * @param {object} node - result of createNodeUICallback(). It contains anything
-     * you'd need to render a node
-     */
-    /**
-     * Allows clients to pass custom node rendering callback
-     *
-     * @param {renderNodeCallback} renderNodeCallback - Callback which renders
-     * node.
-     *
-     * @returns {object} this for chaining.
-     */
-    renderNode: function (renderNodeCallback) {
-      nodeRenderer = renderNodeCallback;
-      return this;
-    },
-
-    /**
-     * This callback creates new UI for a graph link. This becomes helpful
-     * when you want to precalculate some properties, which otherwise could be
-     * expensive during rendering frame.
-     *
-     * @callback createLinkUICallback
-     * @param {object} link - graph link for which UI is required.
-     * @returns {object} arbitrary object which will be later passed to renderNode
-     */
-    /**
-     * This function allows clients to pass custom node UI creation callback
-     *
-     * @param {createLinkUICallback} createLinkUICallback - The callback that
-     * creates new link UI
-     * @returns {object} this for chaining.
-     */
-    createLinkUI : function (createLinkUICallback) {
-      linkUIBuilder = createLinkUICallback;
-      rebuildUI();
-      return this;
-    },
-
-    /**
-     * This callback is called by graphics when it wants to render link on
-     * a screen.
-     *
-     * @callback renderLinkCallback
-     * @param {object} link - result of createLinkUICallback(). It contains anything
-     * you'd need to render a link
-     */
-    /**
-     * Allows clients to pass custom link rendering callback
-     *
-     * @param {renderLinkCallback} renderLinkCallback - Callback which renders
-     * link.
-     *
-     * @returns {object} this for chaining.
-     */
-    renderLink: function (renderLinkCallback) {
-      linkRenderer = renderLinkCallback;
-      return this;
     },
 
     /**
@@ -4070,22 +3849,17 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
   function initialize() {
     console.log(`maxParticleCount: ${maxParticleCount}, maxDepth: ${maxDepth}`);
-    nodeUIBuilder = defaults.createNodeUI;
-    nodeRenderer  = defaults.nodeRenderer;
-    linkUIBuilder = defaults.createLinkUI;
-    linkRenderer  = defaults.linkRenderer;
-    nodeUI = {}; linkUI = {}; // Storage for UI of nodes/links
-
-    graph.forEachLink(initLink);
-    graph.forEachNode(initNode);
+    nodeUI = {}; // Storage for UI of nodes
 
     graph.on('changed', onGraphChanged);
 
     if (settings.interactive) createControls();
 
-    //scene.fog = new THREE.Fog( 0x050505, 2000, 3500 );
-    // ---------- Lights ----------
+    // ---------- Fog n shit ------
+    scene.background = new THREE.Color( 0x00141a );
+    scene.fog = new THREE.FogExp2( 0x003b4d, 0.001 );
 
+    // ---------- Lights ----------
     scene.add( new THREE.AmbientLight( 0x444444 ) );
 
     var light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
@@ -4096,16 +3870,14 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     light2.position.set( 0, -1, 0 );
     scene.add( light2 );
 
-
     // -------- Particles ----------
     group = new THREE.Group();
     scene.add( group );
     var helper = new THREE.BoxHelper( new THREE.Mesh( new THREE.BoxGeometry( r, r, r ) ) );
-    helper.material.color.setHex( 0x080808 );
+    helper.material.color.setHex( 0xfafafa );
     helper.material.blending = THREE.AdditiveBlending;
     helper.material.transparent = true;
     group.add( helper );
-    //var segments = maxParticleCount * maxParticleCount;
 
     positions = new Float32Array( maxParticleCount * 6 * 3 ); // not sure about this number
 
@@ -4119,16 +3891,16 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
     var pMaterial = new THREE.PointsMaterial( {
       color: 0xFF0000,
-      size: 5,
-      //blending: THREE.AdditiveBlending,
+      size: 4,
+      blending: THREE.AdditiveBlending,
       transparent: true,
-      sizeAttenuation: false
+      sizeAttenuation: true
     } );
 
-    particles = new THREE.BufferGeometry();
+    particles = new THREE.BufferGeometry(maxParticleCount);
     particlePositions = new Float32Array( maxParticleCount * 3 );
 
-    particles.setDrawRange( 0, particleCount );
+    particles.setDrawRange( 0, 0 );
     particles.addAttribute( 'position', new THREE.BufferAttribute( particlePositions, 3 ).setDynamic( true ) );
 
     // create the particle system
@@ -4142,22 +3914,13 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ).setDynamic( true ) );
 
     //geometry.computeBoundingSphere();
-    geometry.computeMo
 
     geometry.setDrawRange( 0, 0 );
-
-    // var material = new THREE.LineBasicMaterial( {
-    //   vertexColors: THREE.VertexColors,
-    //   //blending: THREE.AdditiveBlending,
-    //   transparent: true
-    // } );
 
     // var material = new THREE.MeshDepthMaterial({color: 0x008060, side: THREE.DoubleSide});
 
     var material = new THREE.MeshLambertMaterial( {
       color: 0xaaaaaa,
-      //specular: 0xffaaaa,
-      //shininess: 100,
       side: THREE.DoubleSide, vertexColors: THREE.VertexColors, flatShading: false
     } );
 
@@ -4227,48 +3990,35 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     if (beforeFrameRender) {
       beforeFrameRender();
     }
-    // todo: this adds GC pressure. Remove functional iterators
-    //Object.keys(linkUI).forEach(renderLink);
-    //Object.keys(nodeUI).forEach(renderNode);
-   
-    // Object.keys(nodeUI).forEach(function(key) {
-      // renderNode(key);
-    // });
+
     if (!isStable) {
+      // Calculate Particle positions
       for ( var i = 0; i < nodeArray.length; i++ ) {
         particlePositions[ i * 3     ] = nodeArray[i].pos.x;
         particlePositions[ i * 3 + 1 ] = nodeArray[i].pos.y;
-        if (nodeArray[i].userData.depth !== null) {
-          particlePositions[ i * 3 + 2 ] = -1 * nodeArray[i].userData.depth * HEIGHT_STEP;
+        if (nodeArray[i].depth !== null) {
+          particlePositions[ i * 3 + 2 ] = -1 * nodeArray[i].depth * HEIGHT_STEP;
         }
         else {
           particlePositions[ i * 3 + 2 ] = -1 * maxDepth * HEIGHT_STEP;
         }
       }
-      //console.log(particlePositions);
       particles.setDrawRange( 0, nodeArray.length );
       pointCloud.geometry.attributes.position.needsUpdate = true;
   
-      // TODO: find the best place to call the Delaunator
-      // if (!isStable) {
-      //   triangles = throttledDelaunatorTriangles(nodeArray);
-      // }
-
-
       // TODO: Maybe maxDepth should not be too big... looks weird
       if (triangles && triangles.length > 0) {
         for ( var i = 0; i < triangles.length; i++ )  {
           positions[ i * 3 + 0 ] = (nodeArray[triangles[i]].pos.x);
           positions[ i * 3 + 1 ] = (nodeArray[triangles[i]].pos.y);
-          if (nodeArray[triangles[i]].userData.depth !== null) {
-            positions[ i * 3 + 2 ] = (-1 * nodeArray[triangles[i]].userData.depth * HEIGHT_STEP);
+          if (nodeArray[triangles[i]].depth !== null) {
+            positions[ i * 3 + 2 ] = (-1 * nodeArray[triangles[i]].depth * HEIGHT_STEP);
           }
           else {
             positions[ i * 3 + 2 ] = (-1 * maxDepth * HEIGHT_STEP);
           }
         }
   
-        // COMPUTE THE NORMALS YOURSELF, currently computed with the dalaunay... which is kind of ok.
         mesh.geometry.computeVertexNormals();
         mesh.geometry.normalizeNormals();
         mesh.geometry.setDrawRange( 0, triangles.length * 3 );
@@ -4282,46 +4032,26 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     renderer.render(scene, camera);
   }
 
-  function renderNode(nodeId) {
-    nodeRenderer(nodeUI[nodeId]);
-  }
-
-  function renderLink(linkId) {
-    linkRenderer(linkUI[linkId]);
-  }
-
   function initNode(node) {
-    // console.log(node);
-    // this shit has to change, I don't need the mesh at all...
-    var ui = nodeUIBuilder(node); // TODO: this is the nodeS that are hanging around
-    if (!ui) return;
+    //console.log(node);
+    var ui = {}; 
+
     // augment it with position data:
     ui.pos = layout.getNodePosition(node.id);
-    // and store for subsequent use:
-    nodeUI[node.id] = ui;
 
     let depth = (node.links &&
       node.links.length > 0 &&
       node.links[0].data &&
       node.links[0].data.depthOfChild) ? node.links[0].data.depthOfChild : 0;
-    nodeUI[node.id].userData.depth = depth; 
+
+    ui.depth = depth
+    // and store for subsequent use:
+    nodeUI[node.id] = ui;
     nodeArray.push(ui);
 
     if (!isStable) {
       triangles = throttledDelaunatorTriangles(nodeArray);
     }
-    //scene.add(ui);
-  }
-
-  function initLink(link) {
-    var ui = linkUIBuilder(link);
-    if (!ui) return;
-
-    ui.from = layout.getNodePosition(link.fromId);
-    ui.to = layout.getNodePosition(link.toId);
-
-    linkUI[link.id] = ui;
-    //scene.add(ui);
   }
 
   function onGraphChanged(changes) {
@@ -4332,19 +4062,11 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
         if (change.node) {
           initNode(change.node);
         }
-        if (change.link) {
-          initLink(change.link);
-        }
       } else if (change.changeType === 'remove') {
         if (change.node) {
           var node = nodeUI[change.node.id];
           if (node) { scene.remove(node); }
           delete nodeUI[change.node.id];
-        }
-        if (change.link) {
-          var link = linkUI[change.link.id];
-          if (link) { scene.remove(link); }
-          delete linkUI[change.link.id];
         }
       }
     }
@@ -4411,17 +4133,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
   }
 
   function rebuildUI() {
-    Object.keys(nodeUI).forEach(function (nodeId) {
-      scene.remove(nodeUI[nodeId]);
-    });
     nodeUI = {};
-
-    Object.keys(linkUI).forEach(function (linkId) {
-      scene.remove(linkUI[linkId]);
-    });
-    linkUI = {};
-
-    graph.forEachLink(initLink);
     graph.forEachNode(initNode);
   }
 
@@ -4481,67 +4193,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
 };
 
-},{"./lib/defaults":37,"circumradius":5,"delaunator":6,"lodash":47,"ngraph.forcelayout3d":11,"ngraph.merge":18,"three":44,"three.trackball":43}],37:[function(require,module,exports){
-/**
- * This module provides default settings for three.js graphics. There are a lot
- * of possible configuration parameters, and this file provides reasonable defaults
- */
-var THREE = require('three');
-
-/**
- * Default node UI creator. Renders a cube
- */
-module.exports.createNodeUI = createNodeUI;
-
-/**
- * Default link UI creator. Renders a line
- **/
-module.exports.createLinkUI = createLinkUI;
-
-/**
- * Updates cube position
- */
-module.exports.nodeRenderer = nodeRenderer;
-
-/**
- * Updates line position
- */
-module.exports.linkRenderer = linkRenderer;
-
-var NODE_SIZE = 2; // default size of a node square
-
-
-function createNodeUI(node) {
-  var nodeMaterial = new THREE.MeshBasicMaterial({ color: 0xfefefe });
-  var nodeGeometry = new THREE.BoxGeometry(NODE_SIZE, NODE_SIZE, NODE_SIZE);
-  return new THREE.Mesh(nodeGeometry, nodeMaterial);
-}
-
-function createLinkUI(link) {
-  var linkGeometry = new THREE.Geometry();
-  // we don't care about position here. linkRenderer will update it
-  linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-  linkGeometry.vertices.push(new THREE.Vector3(0, 0, 0));
-
-  var linkMaterial = new THREE.LineBasicMaterial({ color: 0x00cccc });
-  return new THREE.Line(linkGeometry, linkMaterial);
-}
-
-function nodeRenderer(node) {
-  node.position.x = node.pos.x;
-  node.position.y = node.pos.y;
-  node.position.z = node.pos.z;
-}
-
-function linkRenderer(link) {
-  var from = link.from;
-  var to = link.to;
-  link.geometry.vertices[0].set(from.x, from.y, from.z);
-  link.geometry.vertices[1].set(to.x, to.y, to.z);
-  link.geometry.verticesNeedUpdate = true;
-}
-
-},{"three":44}],38:[function(require,module,exports){
+},{"circumradius":4,"delaunator":5,"lodash":45,"ngraph.forcelayout3d":10,"ngraph.merge":17,"three":42,"three.trackball":41}],36:[function(require,module,exports){
 "use strict"
 
 module.exports = compressExpansion
@@ -4576,7 +4228,7 @@ function compressExpansion(e) {
   e.length = top
   return e
 }
-},{}],39:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict"
 
 var twoProduct = require("two-product")
@@ -4680,7 +4332,7 @@ return robustDeterminant")
 }
 
 generateDispatch()
-},{"robust-compress":38,"robust-scale":41,"robust-sum":42,"two-product":45}],40:[function(require,module,exports){
+},{"robust-compress":36,"robust-scale":39,"robust-sum":40,"two-product":43}],38:[function(require,module,exports){
 "use strict"
 
 var determinant = require("robust-determinant")
@@ -4752,7 +4404,7 @@ function generateDispatch() {
 }
 
 generateDispatch()
-},{"robust-determinant":39}],41:[function(require,module,exports){
+},{"robust-determinant":37}],39:[function(require,module,exports){
 "use strict"
 
 var twoProduct = require("two-product")
@@ -4803,7 +4455,7 @@ function scaleLinearExpansion(e, scale) {
   g.length = count
   return g
 }
-},{"two-product":45,"two-sum":46}],42:[function(require,module,exports){
+},{"two-product":43,"two-sum":44}],40:[function(require,module,exports){
 "use strict"
 
 module.exports = linearExpansionSum
@@ -4960,7 +4612,7 @@ function linearExpansionSum(e, f) {
   g.length = count
   return g
 }
-},{}],43:[function(require,module,exports){
+},{}],41:[function(require,module,exports){
 /**
  * @author Eberhard Graether / http://egraether.com/
  * @author Mark Lundin / http://mark-lundin.com
@@ -5579,7 +5231,7 @@ function preventEvent( event ) { event.preventDefault(); }
 
 Trackball.prototype = Object.create(THREE.EventDispatcher.prototype);
 
-},{"three":44}],44:[function(require,module,exports){
+},{"three":42}],42:[function(require,module,exports){
 (function (global, factory) {
 	typeof exports === 'object' && typeof module !== 'undefined' ? factory(exports) :
 	typeof define === 'function' && define.amd ? define(['exports'], factory) :
@@ -50644,7 +50296,7 @@ Trackball.prototype = Object.create(THREE.EventDispatcher.prototype);
 
 })));
 
-},{}],45:[function(require,module,exports){
+},{}],43:[function(require,module,exports){
 "use strict"
 
 module.exports = twoProduct
@@ -50678,7 +50330,7 @@ function twoProduct(a, b, result) {
 
   return [ y, x ]
 }
-},{}],46:[function(require,module,exports){
+},{}],44:[function(require,module,exports){
 "use strict"
 
 module.exports = fastTwoSum
@@ -50696,7 +50348,7 @@ function fastTwoSum(a, b, result) {
 	}
 	return [ar+br, x]
 }
-},{}],47:[function(require,module,exports){
+},{}],45:[function(require,module,exports){
 (function (global){
 /**
  * @license
