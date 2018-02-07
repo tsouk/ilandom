@@ -1,6 +1,3 @@
 [submodule "sigma.js"]
 	path = sigma.js
 	url = https://github.com/tsouk/sigma.js.git
-[submodule "ngraph.pixel"]
-	path = ngraph.pixel
-	url = https://github.com/tsouk/ngraph.pixel.git
