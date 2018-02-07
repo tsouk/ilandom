@@ -35,7 +35,7 @@ The service can then be called by something like Unity
 - [x] Make test pages (Currently if the service has no connectivity to the net, it will load a hardcoded tsouk.com JSON response)
 - [x] Implement simple 3d ngraph approach
 - [x] Implement 2d ngraph
-- [ ] island implementation
+- [x] island implementation v1
 - [ ] Remove that flavour stuff
 - [ ] 3d Hanami for Hanami season...
 - [ ] Look into cytoscape
@@ -44,3 +44,11 @@ The service can then be called by something like Unity
 - [ ] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
 - [ ] ADD SOUND!
 - [ ] ALPHA SHAPES: https://github.com/mikolalysenko/alpha-shape
+
+- [ ] the leftover nodes of mountains are layout3d ngraph clouds.
+- [ ] the mountain will slowly grow
+- [ ] snow/weather coming off
+- [ ] island implementation v2
+
+- [ ] a nurbs / plane geometry version
+- [ ] a mortphNormals non-buffer Geometry version 
