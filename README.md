@@ -45,6 +45,11 @@ The service can then be called by something like Unity
 - [ ] ADD SOUND!
 - [ ] ALPHA SHAPES: https://github.com/mikolalysenko/alpha-shape
 
+- [ ] Redoing the surface:
+  -  Circular shapes (or turrets): These are created when too many children form unilateraly around the parent. The ideal solution would be in the layout algorithm (1). The next solution would be affecting the heights. A `MAX_CHILDREN_PER_NODE` parameter is used to alleviate the problem now. This is not ideal because some of these children hold most of the rest of the website. So a first pass that gets information from the DOM is important. Should reconsider cheerio here to figure out a better data object to begin with, or add info to the nodes.
+
+- [ ] a non linear height function might work better.
+- [ ] For any node with no children, should add seanodes based on it's (maxDepth - depth), to make the form more rounded.
 - [ ] the leftover nodes of mountains are layout3d ngraph clouds.
 - [ ] the mountain will slowly grow
 - [ ] snow/weather coming off
