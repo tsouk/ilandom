@@ -21,7 +21,7 @@
     "grunt-npm-command": "^0.1.2",
     "hbs": "~3.1.0",
     "jsdom": "^8.1.0",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.5",
     "lru-cache": "^4.1.1",
     "morgan": "~1.6.1",
     "ngraph.events": "0.0.4",
@@ -44,7 +44,7 @@
   },
   "devDependencies": {
     "browserify": "^16.0.0",
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
     "grunt-run-grunt": "^0.1.4"
   }
