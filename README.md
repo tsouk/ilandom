@@ -36,19 +36,21 @@ The service can then be called by something like Unity
 - [x] Implement simple 3d ngraph approach
 - [x] Implement 2d ngraph
 - [x] island implementation v1
-- [ ] Remove that flavour stuff
+- [x] Remove that flavour stuff
 - [ ] 3d Hanami for Hanami season...
-- [ ] Look into cytoscape
 - [ ] Upgrade to Node9
 - [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 
-- [ ] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
+- [x] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
 - [ ] ADD SOUND!
 - [ ] ALPHA SHAPES: https://github.com/mikolalysenko/alpha-shape
 
+- [ ] a non linear height function might work better.
 - [ ] Redoing the surface:
   -  Circular shapes (or turrets): These are created when too many children form unilateraly around the parent. The ideal solution would be in the layout algorithm (1). The next solution would be affecting the heights. A `MAX_CHILDREN_PER_NODE` parameter is used to alleviate the problem now. This is not ideal because some of these children hold most of the rest of the website. So a first pass that gets information from the DOM is important. Should reconsider cheerio here to figure out a better data object to begin with, or add info to the nodes.
 
-- [ ] a non linear height function might work better.
+- [ ] a Mirrored iland underneath, the roots of the island. must be a different delaunay. different graph layout. edges can connect. 
+
+- [ ] light houses, greek windmills
 - [ ] For any node with no children, should add seanodes based on it's (maxDepth - depth), to make the form more rounded.
 - [ ] the leftover nodes of mountains are layout3d ngraph clouds.
 - [ ] the mountain will slowly grow

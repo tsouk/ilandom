@@ -20881,7 +20881,9 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
   // -------------------------------------------------------
   var nodeUI; // Storage for UI of nodes/links
-  var controls = { update: function noop() {} };
+  var controls = {
+    update: function noop() {}
+  };
 
   var graphics = {
     THREE: THREE, // expose THREE so that clients will not have to require it twice.
@@ -20893,7 +20895,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     /**
      * Gets UI object for a given node id
      */
-    getNodeUI : function (nodeId) {
+    getNodeUI: function (nodeId) {
       return nodeUI[nodeId];
     },
 
@@ -20917,7 +20919,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
      * creates new node UI
      * @returns {object} this for chaining.
      */
-    createNodeUI : function (createNodeUICallback) {
+    createNodeUI: function (createNodeUICallback) {
       //nodeUIBuilder = createNodeUICallback;
       rebuildUI();
       return this;
@@ -20927,7 +20929,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     /**
      * Force a rebuild of the UI. This might be necessary after settings have changed
      */
-    rebuild : function () {
+    rebuild: function () {
       rebuildUI();
     },
 
@@ -20936,9 +20938,15 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
      * This is useful if you want to allow users to update the physics settings of your layout interactively
      */
     resetStable: resetStable,
-    isStable: function() {isStable = true},
-    setMaxDepth: function(maxDepth) {maxDepth = maxDepth},
-    setMaxParticleCount: function(maxParticleCount) {maxParticleCount = maxParticleCount},
+    isStable: function () {
+      isStable = true
+    },
+    setMaxDepth: function (maxDepth) {
+      maxDepth = maxDepth
+    },
+    setMaxParticleCount: function (maxParticleCount) {
+      maxParticleCount = maxParticleCount
+    },
 
     /**
      * Stops animation and deallocates all allocated resources
@@ -20970,82 +20978,85 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     if (settings.interactive) createControls();
 
     // ---------- Fog n shit ------
-    scene.background = new THREE.Color( 0x00141a );
-    scene.fog = new THREE.FogExp2( 0x003b4d, 0.001 );
+    scene.background = new THREE.Color(0x00141a);
+    scene.fog = new THREE.FogExp2(0x003b4d, 0.001);
 
     // ---------- Lights ----------
-    scene.add( new THREE.AmbientLight( 0x444444 ) );
+    scene.add(new THREE.AmbientLight(0x444444));
 
-    var light1 = new THREE.DirectionalLight( 0xffffff, 0.5 );
-    light1.position.set( 1, 1, 1 );
-    scene.add( light1 );
+    var light1 = new THREE.DirectionalLight(0xffffff, 0.5);
+    light1.position.set(1, 1, 1);
+    scene.add(light1);
 
-    var light2 = new THREE.DirectionalLight( 0xffffff, 1.5 );
-    light2.position.set( 0, -1, 0 );
-    scene.add( light2 );
+    var light2 = new THREE.DirectionalLight(0xffffff, 1.5);
+    light2.position.set(0, -1, 0);
+    scene.add(light2);
 
     // -------- Particles ----------
     group = new THREE.Group();
-    scene.add( group );
-    var helper = new THREE.BoxHelper( new THREE.Mesh( new THREE.BoxGeometry( r, r, r ) ) );
-    helper.material.color.setHex( 0xfafafa );
+    scene.add(group);
+    var helper = new THREE.BoxHelper(new THREE.Mesh(new THREE.BoxGeometry(r, r, r)));
+    helper.material.color.setHex(0xfafafa);
     helper.material.blending = THREE.AdditiveBlending;
     helper.material.transparent = true;
-    group.add( helper );
+    group.add(helper);
 
-    positions = new Float32Array( maxParticleCount * 6 * 3 ); // not sure about this number
+    positions = new Float32Array(maxParticleCount * 6 * 3); // not sure about this number
 
-    var faceColor = new THREE.Color( 0x00cd99 );
-    colors = new Float32Array( maxParticleCount * 6 * 3 );
-    for (let index = 0; index < colors.length; index += 3) {
-      colors[index] = faceColor.r;
-      colors[index+1] = faceColor.g;
-      colors[index+2] = faceColor.b;
-    }
+    var faceColor = new THREE.Color(0x00cd99);
+    colors = new Float32Array(maxParticleCount * 6 * 3);
+    // for (let index = 0; index < colors.length; index += 3) {
+    //   colors[index] = Math.random();//faceColor.r; // 1 -> 0
+    //   colors[index+1] = faceColor.g;
+    //   colors[index+2] = faceColor.b;
+    // }
 
-    var pMaterial = new THREE.PointsMaterial( {
+    var pMaterial = new THREE.PointsMaterial({
       color: 0xFF0000,
       size: 4,
       blending: THREE.AdditiveBlending,
       transparent: true,
       sizeAttenuation: true
-    } );
+    });
 
     particles = new THREE.BufferGeometry(maxParticleCount);
-    particlePositions = new Float32Array( maxParticleCount * 3 );
+    particlePositions = new Float32Array(maxParticleCount * 3);
 
-    particles.setDrawRange( 0, 0 );
-    particles.addAttribute( 'position', new THREE.BufferAttribute( particlePositions, 3 ).setDynamic( true ) );
+    particles.setDrawRange(0, 0);
+    particles.addAttribute('position', new THREE.BufferAttribute(particlePositions, 3).setDynamic(true));
 
     // create the particle system
-    pointCloud = new THREE.Points( particles, pMaterial );
-    group.add( pointCloud );
+    pointCloud = new THREE.Points(particles, pMaterial);
+    group.add(pointCloud);
 
     var geometry = new THREE.BufferGeometry();
 
-    geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ).setDynamic( true ) );
-    // add normals???
-    geometry.addAttribute( 'color', new THREE.BufferAttribute( colors, 3 ).setDynamic( true ) );
+    geometry.addAttribute('position', new THREE.BufferAttribute(positions, 3).setDynamic(true));
+    geometry.addAttribute('color', new THREE.BufferAttribute(colors, 3).setDynamic(true));
 
     //geometry.computeBoundingSphere();
 
-    geometry.setDrawRange( 0, 0 );
+    geometry.setDrawRange(0, 0);
 
     // var material = new THREE.MeshDepthMaterial({color: 0x008060, side: THREE.DoubleSide});
 
-    var material = new THREE.MeshLambertMaterial( {
+    var material = new THREE.MeshLambertMaterial({
       color: 0xaaaaaa,
-      side: THREE.DoubleSide, vertexColors: THREE.VertexColors, flatShading: false
-    } );
+      side: THREE.DoubleSide,
+      vertexColors: THREE.FaceColors,
+      flatShading: false
+    });
 
-    mesh = new THREE.Mesh( geometry, material );
-    group.add( mesh );
+    mesh = new THREE.Mesh(geometry, material);
+    group.add(mesh);
   }
 
   function run() {
     if (disposed) return;
 
     requestAnimationFrame(run);
+
+    // Update the graph
     if (!isStable) {
       isStable = layout.step();
     }
@@ -21078,7 +21089,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
     if (options.dom) {
       var domElement = renderer.domElement;
-      if(domElement && domElement.parentNode) {
+      if (domElement && domElement.parentNode) {
         domElement.parentNode.removeChild(domElement);
       }
     }
@@ -21106,36 +21117,64 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     }
 
     if (!isStable) {
-      // Calculate Particle positions
-      for ( var i = 0; i < nodeArray.length; i++ ) {
-        particlePositions[ i * 3     ] = nodeArray[i].pos.x;
-        particlePositions[ i * 3 + 1 ] = nodeArray[i].pos.y;
+      // Assign Particle positions
+      for (var i = 0; i < nodeArray.length; i++) {
+        particlePositions[i * 3] = nodeArray[i].pos.x;
+        particlePositions[i * 3 + 1] = nodeArray[i].pos.y;
         if (nodeArray[i].depth !== null) {
-          particlePositions[ i * 3 + 2 ] = -1 * nodeArray[i].depth * HEIGHT_STEP;
-        }
-        else {
-          particlePositions[ i * 3 + 2 ] = -1 * maxDepth * HEIGHT_STEP;
+          particlePositions[i * 3 + 2] = -1 * nodeArray[i].depth * HEIGHT_STEP;
+        } else {
+          particlePositions[i * 3 + 2] = -1 * maxDepth * HEIGHT_STEP;
         }
       }
-      particles.setDrawRange( 0, nodeArray.length );
+      particles.setDrawRange(0, nodeArray.length);
       pointCloud.geometry.attributes.position.needsUpdate = true;
-  
+
       // TODO: Maybe maxDepth should not be too big... looks weird
       if (triangles && triangles.length > 0) {
-        for ( var i = 0; i < triangles.length; i++ )  {
-          positions[ i * 3 + 0 ] = (nodeArray[triangles[i]].pos.x);
-          positions[ i * 3 + 1 ] = (nodeArray[triangles[i]].pos.y);
+        for (var i = 0; i < triangles.length; i++) {
+          positions[i * 3 + 0] = (nodeArray[triangles[i]].pos.x);
+          positions[i * 3 + 1] = (nodeArray[triangles[i]].pos.y);
           if (nodeArray[triangles[i]].depth !== null) {
-            positions[ i * 3 + 2 ] = (-1 * nodeArray[triangles[i]].depth * HEIGHT_STEP);
+            positions[i * 3 + 2] = (-1 * nodeArray[triangles[i]].depth * HEIGHT_STEP);
+          } else {
+            positions[i * 3 + 2] = (-1 * maxDepth * HEIGHT_STEP);
           }
-          else {
-            positions[ i * 3 + 2 ] = (-1 * maxDepth * HEIGHT_STEP);
+
+          // Colors can be per vertex of per triengle...
+          if (i % 3 == 0) {
+            trangleMinDepth = Math.min(nodeArray[triangles[i]].depth, nodeArray[triangles[i + 1]].depth, nodeArray[triangles[i + 2]].depth)
+            let distanceFromSea = maxDepth - trangleMinDepth;
+            if (distanceFromSea >= 10) {
+              for (let j = 0; j < 9; j+=3) {
+                colors[i * 3 + 0 + j] = colors[i * 3 + 1 + j] = colors[i * 3 + 2 + j] = 1;
+              }
+            } else if (distanceFromSea >= 3) {
+              for (let j = 0; j < 9; j+=3) {
+                colors[i * 3 + 0 + j] = 0.1;
+                colors[i * 3 + 1 + j] = 1;
+                colors[i * 3 + 2 + j] = 0.1;
+              }
+            } else if (distanceFromSea >= 1) {
+              for (let j = 0; j < 9; j+=3) {
+                colors[i * 3 + 0 + j] = 218 / 256;
+                colors[i * 3 + 1 + j] = 165 / 256;
+                colors[i * 3 + 2 + j] = 32 / 256;
+              }
+            } else {
+              for (let j = 0; j < 9; j+=3) {
+                colors[i * 3 + 0 + j] = 0.1;
+                colors[i * 3 + 1 + j] = 0.1;
+                colors[i * 3 + 2 + j] = 1;
+              }
+            }
           }
+
         }
-  
+
         mesh.geometry.computeVertexNormals();
         mesh.geometry.normalizeNormals();
-        mesh.geometry.setDrawRange( 0, triangles.length * 3 );
+        mesh.geometry.setDrawRange(0, triangles.length * 3);
         mesh.geometry.attributes.position.needsUpdate = true;
         mesh.geometry.attributes.color.needsUpdate = true;
         mesh.geometry.attributes.normal.needsUpdate = true;
@@ -21148,7 +21187,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
   function initNode(node) {
     //console.log(node);
-    var ui = {}; 
+    var ui = {};
 
     // augment it with position data:
     ui.pos = layout.getNodePosition(node.id);
@@ -21179,7 +21218,9 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
       } else if (change.changeType === 'remove') {
         if (change.node) {
           var node = nodeUI[change.node.id];
-          if (node) { scene.remove(node); }
+          if (node) {
+            scene.remove(node);
+          }
           delete nodeUI[change.node.id];
         }
       }
@@ -21205,7 +21246,14 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
       return settings.renderer;
     }
 
-    var isWebGlSupported = ( function () { try { var canvas = document.createElement( 'canvas' ); return !! window.WebGLRenderingContext && ( canvas.getContext( 'webgl' ) || canvas.getContext( 'experimental-webgl' ) ); } catch( e ) { return false; } } )();
+    var isWebGlSupported = (function () {
+      try {
+        var canvas = document.createElement('canvas');
+        return !!window.WebGLRenderingContext && (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'));
+      } catch (e) {
+        return false;
+      }
+    })();
     var renderer = isWebGlSupported ? new THREE.WebGLRenderer(settings) : new THREE.CanvasRenderer(settings);
     var width, height;
     if (settings.container) {
@@ -21231,7 +21279,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
       return settings.camera;
     }
     var container = renderer.domElement;
-    var camera = new THREE.PerspectiveCamera(75, container.clientWidth/container.clientHeight, 0.1, 3000);
+    var camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 3000);
     camera.position.z = 400;
     return camera;
   }
@@ -21253,9 +21301,8 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
   function getDelaunayTriangles(nodeArray) {
     try {
-      delaunay = new delaunator(nodeArray, (node) => node.pos.x,  (node) => node.pos.y);
-    }
-    catch (e) {
+      delaunay = new delaunator(nodeArray, (node) => node.pos.x, (node) => node.pos.y);
+    } catch (e) {
       console.log(e);
     }
     if (delaunay) {
@@ -21299,7 +21346,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     *   if  REMOVE_FLAG you have to remove triangles[i],triangles[i+1],triangles[i+2],
     *   triangles.splice(i, 3);
     */
-    return triangles.filter(function(cell) {
+    return triangles.filter(function (cell) {
       //let simplex =; // needs all the points here??????????
       return circumradius(simplex) * alpha < 1
     })
