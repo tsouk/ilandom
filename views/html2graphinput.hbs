@@ -1,15 +1,17 @@
 <h1>{{title}}</h1>
 <form action="/html2graph" method="post">
   <div class="myRadioGroup">
-    <input type="radio" id="in3d" name="dimensions" value="3d" checked="checked">
+    <input type="radio" id="in3d" name="dimensions" value="3d">
     <label for="in3d">3d graph <em>using <a href="https://github.com/anvaka/ngraph">ngraph</a></em></label>
 
     <input type="radio" id="in2d" name="dimensions" value="2d">
     <label for="in2d">2d graph <em>using <a href="https://github.com/jacomyal/sigma.js">sigma</a></em></label>
 
-    <input type="radio" id="island" name="dimensions" value="island">
+    <input type="radio" id="island" name="dimensions" value="island" checked="checked">
     <label for="island">island! <em>(very experimental)</em></label>
   </div>
   <input class="myButton" type="submit" value="show me!">
   <input class="myInput" type="text" name="url">
 </form>
+
+<p>This is an investigation in representations of web pages (the HTML structure) and web sites as structures in an explorable 3D space. I have started from simple 2d graphs, moving to 3d graphs and eventually landscape structures. The goal is to arrive at a meaningful and playful structural representation of the web.<br><br>Generative design, graphs, three.js, WebGL</p>
