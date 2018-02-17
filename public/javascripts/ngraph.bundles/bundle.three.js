@@ -20977,9 +20977,9 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
     if (settings.interactive) createControls();
 
-    // ---------- Fog n shit ------
+    // ---------- Fog  ------
     scene.background = new THREE.Color(0x00141a);
-    scene.fog = new THREE.FogExp2(0x003b4d, 0.001);
+    scene.fog = new THREE.FogExp2(0x003b4d, 0.0005);
 
     // ---------- Lights ----------
     scene.add(new THREE.AmbientLight(0x444444));
@@ -20999,17 +20999,11 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     helper.material.color.setHex(0xfafafa);
     helper.material.blending = THREE.AdditiveBlending;
     helper.material.transparent = true;
-    group.add(helper);
+    // group.add(helper);
 
     positions = new Float32Array(maxParticleCount * 6 * 3); // not sure about this number
 
-    var faceColor = new THREE.Color(0x00cd99);
     colors = new Float32Array(maxParticleCount * 6 * 3);
-    // for (let index = 0; index < colors.length; index += 3) {
-    //   colors[index] = Math.random();//faceColor.r; // 1 -> 0
-    //   colors[index+1] = faceColor.g;
-    //   colors[index+2] = faceColor.b;
-    // }
 
     var pMaterial = new THREE.PointsMaterial({
       color: 0xFF0000,
@@ -21279,7 +21273,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
       return settings.camera;
     }
     var container = renderer.domElement;
-    var camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 3000);
+    var camera = new THREE.PerspectiveCamera(90, container.clientWidth / container.clientHeight, 0.1, 5000);
     camera.position.z = 400;
     return camera;
   }

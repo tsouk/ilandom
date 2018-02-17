@@ -30,6 +30,15 @@ The client can then use:
 
 The service can then be called by something like Unity
 
+### Useful links
+- [Bounding boxes](https://stackoverflow.com/questions/23073170/calculate-bounding-polygon-of-alpha-shape-from-the-delaunay-triangulation)
+- 
+
+
+
+
+
+
 ### Options / Landing page
 - [ ] Redesign, responsive, mobile
 - [ ] Options:
@@ -57,6 +66,10 @@ The service can then be called by something like Unity
 - [x] Remove that flavour stuff
 - [x] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
 
+- [ ] We are off by 4 faces in tsouk. 
+
+- [ ] 2d Cezar shapes.
+- [ ] look into earcut: https://github.com/mapbox/earcut
 - [ ] 3d Hanami for Hanami season...
 - [ ] Upgrade to Node9
 - [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 
