@@ -20979,7 +20979,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
 
     // ---------- Fog  ------
     scene.background = new THREE.Color(0x00141a);
-    scene.fog = new THREE.FogExp2(0x003b4d, 0.0005);
+    scene.fog = new THREE.FogExp2(0x003b4d, 0.00025);
 
     // ---------- Lights ----------
     scene.add(new THREE.AmbientLight(0x444444));
@@ -21274,6 +21274,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     }
     var container = renderer.domElement;
     var camera = new THREE.PerspectiveCamera(90, container.clientWidth / container.clientHeight, 0.1, 5000);
+    //var camera = new THREE.OrthographicCamera( container.clientWidth / - 2, container.clientWidth / 2, container.clientHeight / 2, container.clientHeight / - 2, 0.1, 5000 );
     camera.position.z = 400;
     return camera;
   }
