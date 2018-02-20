@@ -11,10 +11,6 @@
 <div class="html2graph-info" >
     <h3>{{{hud}}}</h3>
     <div>
-        {{!-- <p id="html2graph-status">Started ForceAtlas2</p> --}}
-        <!-- <p>
-            <button class="myButton" onclick="stopAtlas()">Stop the Atlas</button>
-        </p> -->
         <p class="attribution">
             <em>...made by <a href="https://twitter.com/tsoukn">tsouk</a> with <a href="https://github.com/anvaka/ngraph">ngraph</a></em>
         </p>
@@ -26,5 +22,4 @@
 <script>
   var graphOptions = {};
   window.getUrlAndParseJson('/html2graphJSON?url={{url}}', window.start3dgraph, graphOptions );
-  //window.getUrlAndParseJson({{url}}, window.start3dgraph );
 </script>

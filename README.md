@@ -65,9 +65,11 @@ The service can then be called by something like Unity
 - [x] island implementation v1
 - [x] Remove that flavour stuff
 - [x] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
+- [x] social image
+  - [x] good sceernshots
 
-- [ ] social image
-  - [ ] good sceernshots
+- [ ] Static versioned that sits in drop down.
+
 - [ ] fly by camera!
 - [ ] We are off by 4 faces in tsouk. 
 - [ ] Orthocamera would be nice... try well
@@ -81,6 +83,11 @@ The service can then be called by something like Unity
 - [ ] favicon
 - [ ] ALPHA SHAPES: https://github.com/mikolalysenko/alpha-shape
 - [ ] Voronoi
+
+- [ ] Many children circle / sphere issue
+  - [ ] consider them a different thing
+  - [ ] clouds
+  - [ ] roots, depth
 
 - [ ] Heights(no. of children, data, centrality, depth)
   - [ ] a non linear height function might work better.

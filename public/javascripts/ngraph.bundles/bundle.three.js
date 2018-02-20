@@ -21298,7 +21298,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     try {
       delaunay = new delaunator(nodeArray, (node) => node.pos.x, (node) => node.pos.y);
     } catch (e) {
-      console.log(e);
+      //console.log(e);
     }
     if (delaunay) {
       // alphaComplex(ALPHA, delaunay.triangles, nodeArray);
