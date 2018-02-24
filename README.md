@@ -68,6 +68,10 @@ The service can then be called by something like Unity
 - [x] social image
   - [x] good sceernshots
 
+- [ ] copy three.js setup for watch, make repeat.
+
+- [ ] Sea is part of the landscape bug.
+
 - [ ] Static versioned that sits in drop down.
 
 - [ ] fly by camera!

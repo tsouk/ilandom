@@ -21136,9 +21136,9 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
           }
 
           // Colors can be per vertex of per triengle...
-          if (i % 3 == 0) {
+          if (i % 3 == 0) { // every 3 i's
             trangleMinDepth = Math.min(nodeArray[triangles[i]].depth, nodeArray[triangles[i + 1]].depth, nodeArray[triangles[i + 2]].depth)
-            let distanceFromSea = maxDepth - trangleMinDepth;
+            let distanceFromSea = maxDepth - trangleMinDepth; // adding +1 makes the last result always 0, but makes for more "connected with long faces" islands
             if (distanceFromSea >= 10) {
               for (let j = 0; j < 9; j+=3) {
                 colors[i * 3 + 0 + j] = colors[i * 3 + 1 + j] = colors[i * 3 + 2 + j] = 1;
@@ -21149,13 +21149,14 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
                 colors[i * 3 + 1 + j] = 1;
                 colors[i * 3 + 2 + j] = 0.1;
               }
-            } else if (distanceFromSea >= 1) {
+            } else if (distanceFromSea >= 0) { // not sure, was >=1
               for (let j = 0; j < 9; j+=3) {
                 colors[i * 3 + 0 + j] = 218 / 256;
                 colors[i * 3 + 1 + j] = 165 / 256;
                 colors[i * 3 + 2 + j] = 32 / 256;
               }
             } else {
+              //console.log(distanceFromSea);
               for (let j = 0; j < 9; j+=3) {
                 colors[i * 3 + 0 + j] = 0.1;
                 colors[i * 3 + 1 + j] = 0.1;
