@@ -5,7 +5,9 @@
   "scripts": {
     "start": "node ./bin/www",
     "bundle-ngraph": "browserify src/entry_points/index.js > public/javascripts/ngraph.bundles/bundle.js && browserify src/entry_points/index.three.js > public/javascripts/ngraph.bundles/bundle.three.js",
-    "build-sigma": "grunt build"
+    "watchify": "watchify src/entry_points/index.three.js -o public/javascripts/ngraph.bundles/bundle.three.js --verbose",
+    "build-sigma": "grunt build",
+    "dev": "concurrently --names \"WATCHIFY,EXPRESS-SERVER\" -c \"bgBlue.bold,bgGreen.bold\" \"npm run watchify\" \"npm run start\""
   },
   "main": "./bin/www",
   "repository": {
@@ -47,8 +49,10 @@
   },
   "devDependencies": {
     "browserify": "^16.0.0",
+    "concurrently": "^3.5.1",
     "grunt": "^1.0.2",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-run-grunt": "^0.1.4"
+    "grunt-run-grunt": "^0.1.4",
+    "watchify": "^3.10.0"
   }
 }

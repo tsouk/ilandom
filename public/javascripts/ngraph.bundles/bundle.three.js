@@ -1,7 +1,8 @@
 (function(){function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s}return e})()({1:[function(require,module,exports){
 // ----------- Lib ---------------
 
-var eventify = require('ngraph.events');
+const eventify = require('ngraph.events');
+const _ = require('lodash');
 
 let events = {}
 eventify(events);
@@ -40,14 +41,12 @@ function createRoot(graph, domNode) {
     depth: 0,
     numberOfChildren: 0
   });
-
-  graph.ilandom = {};
-  graph.ilandom.maxDepth = 0;
   
   return rootId;
 }
 
 function recurseBF(graph, treeHeadNode, MAX_CHILDREN_PER_NODE = Infinity) {
+  // TODO: Change this into a generator, Yield max depth here by callingfindMaxDepth, then call next to do the rest?
   rootId = createRoot(graph, treeHeadNode);
   events.fire('createRoot');
 
@@ -56,7 +55,6 @@ function recurseBF(graph, treeHeadNode, MAX_CHILDREN_PER_NODE = Infinity) {
     nodeId: rootId,
     element: treeHeadNode
   }];
-  var queueItem = 0; //could use that too
   var current;
   var parent;
   var children, i, len;
@@ -68,9 +66,9 @@ function recurseBF(graph, treeHeadNode, MAX_CHILDREN_PER_NODE = Infinity) {
       let hasNoType1Children = true;
       // console.log('shifted next child that is now a parent, from queue');
       // for something like DFS ("show children -> traverse depth first") do .pop()
+      // for BFS  do .shift()
 
       depth = current.depth;
-      if (depth > graph.ilandom.maxDepth) { graph.ilandom.maxDepth = depth; }
       
       parent = current.element;
       parentNodeId = current.nodeId;
@@ -113,22 +111,19 @@ function addNewChildNodeToParent(graph, parentNodeId, child, depth) {
   nodeCount = graph.getNodesCount();
   nodeCount++;
   childNodeId = child.tagName + '-' + nodeCount;
-
-  let currentDepth = !!depth ? depth + 1 : null;
+  
+  //what if depth is 0 ...this is where I fucked up the sea... oh man
+  
   //console.group();
   // console.log('Before AddLink');
-  graph.getNode(parentNodeId).data.numberOfChildren++;
-  graph.addLink(parentNodeId, childNodeId, {depthOfChild: currentDepth});
+  //graph.getNode(parentNodeId).data.numberOfChildren++;
+  graph.addLink(parentNodeId, childNodeId, {
+                                            depthOfChild: depth + 1,
+                                            bytesOfChild: _.get(child,'nodeBytes', 0)
+                                          });
   // console.log('After AddLink');
 
-  var justAddedNode = graph.getNode(childNodeId);
-  
-  if (justAddedNode.data) {
-    justAddedNode.data.depth = currentDepth;
-  }
-  else {
-    justAddedNode.data = {depth: currentDepth, numberOfChildren: 0};
-  }
+  //graph.getNode(childNodeId).data = {numberOfChildren: 0};
 
   events.fire('added', parentNodeId, childNodeId);
   return childNodeId;
@@ -141,7 +136,6 @@ function findMaxDepth(treeHeadNode, MAX_CHILDREN_PER_NODE = Infinity) {
     depth: 0,
     element: treeHeadNode
   }];
-  var queueItem = 0; //could use that too
   var current;
   var parent;
   var children, i, len;
@@ -203,7 +197,7 @@ module.exports = {
   hashCode,
   intToRGB,
 };
-},{"ngraph.events":7}],2:[function(require,module,exports){
+},{"lodash":6,"ngraph.events":7}],2:[function(require,module,exports){
 "use strict"
 
 var dup = require("dup")
@@ -20969,6 +20963,11 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     beforeFrameRender = cb;
   }
 
+  function normalize (val, max, min) {
+    //need max of bytes from the heaviest child.
+    return (val - min) / (max - min);
+  }
+
   function initialize() {
     console.log(`maxParticleCount: ${maxParticleCount}, maxDepth: ${maxDepth}`);
     nodeUI = {}; // Storage for UI of nodes
@@ -21116,7 +21115,8 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
         particlePositions[i * 3] = nodeArray[i].pos.x;
         particlePositions[i * 3 + 1] = nodeArray[i].pos.y;
         if (nodeArray[i].depth !== null) {
-          particlePositions[i * 3 + 2] = -1 * nodeArray[i].depth * HEIGHT_STEP;
+          //particlePositions[i * 3 + 2] = -1 * (nodeArray[i].depth- nodeArray[i].bytes*0.02) * HEIGHT_STEP;
+          particlePositions[i * 3 + 2] = -1 * (nodeArray[i].depth) * HEIGHT_STEP;
         } else {
           particlePositions[i * 3 + 2] = -1 * maxDepth * HEIGHT_STEP;
         }
@@ -21130,7 +21130,7 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
           positions[i * 3 + 0] = (nodeArray[triangles[i]].pos.x);
           positions[i * 3 + 1] = (nodeArray[triangles[i]].pos.y);
           if (nodeArray[triangles[i]].depth !== null) {
-            positions[i * 3 + 2] = (-1 * nodeArray[triangles[i]].depth * HEIGHT_STEP);
+            positions[i * 3 + 2] = -1 * (nodeArray[triangles[i]].depth) * HEIGHT_STEP;
           } else {
             positions[i * 3 + 2] = (-1 * maxDepth * HEIGHT_STEP);
           }
@@ -21187,12 +21187,10 @@ module.exports = function (graph, settings, maxParticleCount, maxDepth) {
     // augment it with position data:
     ui.pos = layout.getNodePosition(node.id);
 
-    let depth = (node.links &&
-      node.links.length > 0 &&
-      node.links[0].data &&
-      node.links[0].data.depthOfChild) ? node.links[0].data.depthOfChild : 0;
-
-    ui.depth = depth
+    // Why depthOfChild: In the graph we add links, so the first thing that is added is a link with a depthOfChild. 
+    ui.depth = _.get(node, 'links[0].data.depthOfChild', 0); // probably needs a -1 here
+    ui.bytes = _.get(node, 'links[0].data.bytesOfChild', 0);
+    
     // and store for subsequent use:
     nodeUI[node.id] = ui;
     nodeArray.push(ui);

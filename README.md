@@ -71,6 +71,7 @@ The service can then be called by something like Unity
 - [ ] copy three.js setup for watch, make repeat.
 
 - [ ] Sea is part of the landscape bug.
+  - [ ] Might be that the delaunay keeps that high point out, in the case of a node with one child, with one child etc.
 
 - [ ] Static versioned that sits in drop down.
 
