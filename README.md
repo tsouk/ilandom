@@ -67,8 +67,11 @@ The service can then be called by something like Unity
 - [x] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
 - [x] social image
   - [x] good sceernshots
+- [x] copy three.js setup for watch, make repeat.
 
-- [ ] copy three.js setup for watch, make repeat.
+- [ ] Upgrade to Node8
+- [ ] night sky, sea
+- [ ] Clear timeout later than the last child (COOLOFF_PERIOD)
 
 - [ ] Sea is part of the landscape bug.
   - [ ] Might be that the delaunay keeps that high point out, in the case of a node with one child, with one child etc.
@@ -82,7 +85,6 @@ The service can then be called by something like Unity
 - [ ] 2d Cezar shapes.
 - [ ] look into earcut: https://github.com/mapbox/earcut
 - [ ] 3d Hanami for Hanami season...
-- [ ] Upgrade to Node9
 - [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 
 - [ ] ADD SOUND!
 - [ ] favicon
