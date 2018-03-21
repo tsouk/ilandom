@@ -4,14 +4,23 @@
 
 ### "A City is not a Tree"
 
+_A city is a tree_ or, _A Tree is a city_
+
+Arguably the seminal work on the above idea is from Christopher Alexander, and it can be found [here](http://www.bp.ntu.edu.tw/wp-content/uploads/2011/12/06-Alexander-A-city-is-not-a-tree.pdf). I knew of Christopher Alexander's work for years, and have gone through my copy of the Pattern Language time and time again, but I did serendipitously stumble upon this just at the right time.
+
+The idea I am investigating is indeed the opposite, if I can make a city out of tree structures. It is also the idea of making a room out of tree structures, and making all these so a user can traverse them comfortably. It may well be that as a user traverses these web resources (URIs) a new structure is created, something akin to a city per browsing history. But that is still in the assumptions bucket indeed.
+
+The perceived difference of opinions that I would have had with Christopher Alexander's work is definitely perceived. Why would he even write an essay on this subject if the tree structure was not close enough to decribe a city? Indeed it is the way some architects have design cities, albeit not that good of a design, by Alexander's opinion. And I agree. It is the complexity of the semi-lattice that really gives life to a city. 
+
 Semi-lattice VS. tree
 
 The interconnections of the HTML DOM tree (links called URL fragments, e.g. `href=”#chapter2”`), or the tree of internal links ia an extra reading that talks not about how the island/city gets structure, but how it **works**. It creates roads, veins, rivers, or pathways from one place to the other.
 where the tree path is like the bold line shown below, and the other lines are informed by the interconnections.
 ![alt text](./docs/03-City-Branching.jpg)
-
 ![alt text](./docs/baran_nets.jpg)
 ![alt text](./docs/taub22.png)
+
+What is the part that makes a city _not a tree_? Highlight that, map it to the idea of a web site/domain as building graph, or a web page as a room graph, or a web history as a city graph. There you have the interactions. It is the inter-connections between the URIs that show the interactions within these elements.
 
 
 ## TODO
