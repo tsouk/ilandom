@@ -69,7 +69,9 @@ The service can then be called by something like Unity
   - [x] good sceernshots
 - [x] copy three.js setup for watch, make repeat.
 
-- []
+- [ ] Upgrade to Node8
+- [ ] night sky, sea
+- [ ] Clear timeout later than the last child (COOLOFF_PERIOD)
 
 - [ ] Sea is part of the landscape bug.
   - [ ] It's the +1 for depthOfChild that is happening in recurseBF
@@ -83,7 +85,6 @@ The service can then be called by something like Unity
 - [ ] 2d Cezar shapes.
 - [ ] look into earcut: https://github.com/mapbox/earcut
 - [ ] 3d Hanami for Hanami season...
-- [ ] Upgrade to Node9
 - [ ] Lodash is now in ilandom, maybe should be only in ngraph.three 
 - [ ] ADD SOUND!
 - [ ] favicon
