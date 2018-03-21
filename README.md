@@ -22,11 +22,6 @@ where the tree path is like the bold line shown below, and the other lines are i
 
 What is the part that makes a city _not a tree_? Highlight that, map it to the idea of a web site/domain as building graph, or a web page as a room graph, or a web history as a city graph. There you have the interactions. It is the inter-connections between the URIs that show the interactions within these elements.
 
-
-## TODO
-1. Remove that flavour bit and do everything in options... hanami, etc.
-1. remove openshift stuff
-
 ### Service
 Service that responds with JSON of `nodes + data + x,y` and `edges + data` for:
 
@@ -55,12 +50,6 @@ The service can then be called by something like Unity
 
 ### Useful links
 - [Bounding boxes](https://stackoverflow.com/questions/23073170/calculate-bounding-polygon-of-alpha-shape-from-the-delaunay-triangulation)
-- 
-
-
-
-
-
 
 ### Options / Landing page
 - [ ] Redesign, responsive, mobile
@@ -78,7 +67,6 @@ The service can then be called by something like Unity
     - [ ] night / day / time at place of website
     - [ ] weather effects (on/off)
   - [ ] city
-
 
 ### Roadmap
 - [x] Move to service architecture - v1
