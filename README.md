@@ -1,5 +1,19 @@
 # "no DOM is an iland"
 
+## Ideas
+
+### "A City is not a Tree"
+
+Semi-lattice VS. tree
+
+The interconnections of the HTML DOM tree (links called URL fragments, e.g. `href=”#chapter2”`), or the tree of internal links ia an extra reading that talks not about how the island/city gets structure, but how it **works**. It creates roads, veins, rivers, or pathways from one place to the other.
+where the tree path is like the bold line shown below, and the other lines are informed by the interconnections.
+![alt text](./docs/03-City-Branching.jpg)
+
+![alt text](./docs/baran_nets.jpg)
+![alt text](./docs/taub22.png)
+
+
 ## TODO
 1. Remove that flavour bit and do everything in options... hanami, etc.
 1. remove openshift stuff
