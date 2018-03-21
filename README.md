@@ -67,11 +67,12 @@ The service can then be called by something like Unity
 - [x] Move ngraph.pixel in the node_modules instead. BUT bundles can be made outside
 - [x] social image
   - [x] good sceernshots
+- [x] copy three.js setup for watch, make repeat.
 
-- [ ] copy three.js setup for watch, make repeat.
+- []
 
 - [ ] Sea is part of the landscape bug.
-  - [ ] Might be that the delaunay keeps that high point out, in the case of a node with one child, with one child etc.
+  - [ ] It's the +1 for depthOfChild that is happening in recurseBF
 
 - [ ] Static versioned that sits in drop down.
 
