@@ -1,5 +1,10 @@
 # "no DOM is an iland"
 
+## Installation
+- Install brew
+- brew tap heroku/brew && brew install heroku
+- git remote -v
+
 ## Ideas
 
 ### "A City is not a Tree"
