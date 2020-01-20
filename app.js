@@ -9,6 +9,7 @@ const compression = require('compression');
 const index = require('./routes/index');
 const html2graph = require('./routes/html2graph');
 const html2ngraph = require('./routes/html2ngraph');
+const comics = require('./routes/comics');
 const html2graphJSON = require('./routes/html2graphJSON');
 const app = express();
 
@@ -39,6 +40,7 @@ app.use('/', index);
 app.use('/html2graphJSON', html2graphJSON);
 app.use('/html2graph', html2graph);
 app.use('/html2ngraph', html2ngraph);
+app.use('/comics', comics);
 app.use('/frogs', html2graph);
 
 // catch 404 and forward to error handler
