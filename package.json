@@ -27,7 +27,7 @@
     "jsdom": "^8.1.0",
     "lodash": "^4.17.13",
     "lru-cache": "^4.1.1",
-    "morgan": "~1.6.1",
+    "morgan": "~1.9.1",
     "ngraph.events": "0.0.4",
     "ngraph.forcelayout": "^0.2.1",
     "ngraph.forcelayout3d": "0.0.16",
