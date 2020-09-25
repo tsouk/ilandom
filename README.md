@@ -51,7 +51,7 @@ The client can then use:
 - view layer of any visualisation
 - themes per view layer
 
-The service can then be called by something like Unity, etc.
+The service can then be called by something like Unity.
 
 ### Useful links
 - [Bounding boxes](https://stackoverflow.com/questions/23073170/calculate-bounding-polygon-of-alpha-shape-from-the-delaunay-triangulation)
