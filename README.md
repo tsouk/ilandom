@@ -41,7 +41,7 @@ Service that responds with JSON of `nodes + data + x,y` and `edges + data` for:
     - module dom2Json ...
       - ... in node
       - 
-Try to make as little deviation as possible, extra data ok. Test schemas with extra data also work with simpler ones.
+Try to make as little deviation as possible, extra data is ok. Test schemas with extra data also work with simpler ones.
 
 The service will compute the x,y in the server so we can take advantage of just adding the nodes in the client, with simple physics.
 A 3d island visualisation only needs the x,y as it would be coming up fro mwater
