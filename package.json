@@ -40,7 +40,7 @@
     "socket.io": "^1.4.5",
     "three": "^0.89.0",
     "three.fly": "^0.1.6",
-    "validator": "^5.1.0",
+    "validator": "^13.7.0",
     "winston": "^2.4.0"
   },
   "engines": {
